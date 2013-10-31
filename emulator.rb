@@ -28,7 +28,7 @@ def un i
     close
 end
 load "draw.rb"
-load "disorig.rb"
+load "dis.rb"
 WIDTH = 64
 HEIGHT = 32
 screen = Screen.new WIDTH, HEIGHT
