@@ -8,35 +8,26 @@ class Terminal < Hash
         if block then STDIN.read_nonblock(1) rescue nil else STDIN.getc.to_i end
     end
 end
-class GUI < Hash
+class Window < Hash
     require 'rubygame'
-    def initialize(x, y)
-        @dxy = [800.0 / x, 600.0 / y]
-        (@screen = Rubygame::Screen.new([@dxy[0] * x, @dxy[1] * y])).title = "CT8"
-        @events = Rubygame::EventQueue.new
+    include Rubygame
+    def initialize x, y, w = 800, h = 600
+        @screen = Screen.new (@dxy = [w/x, h/y]).zip([x, y]).map{|i,j| i*j }
     end
     def write xy, c
-        xy1 = xy.zip(@dxy).map{|i,j| i*j }
-        xy2 = xy.zip(@dxy).map{|i,j| (i + 1)*j }
-        @screen.draw_box_s(xy1, xy2, (0..2).map { c * 0xff }).update
+        u = [0, 1].map { |a| xy.zip(@dxy).map{|i,j| (i + a)*j } }
+        @screen.draw_box_s(u[0], u[1], (0..2).map { c * 255 }).update
     end
     def beep() end
-    def get_current_key(block = false)
-        keys = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47] + (97..102).to_a
-        i = nil
-        begin
-            @events.each do |event|
-                if i.nil? and event.is_a? Rubygame::KeyDownEvent then
-                    i = keys.index event.key
-                end
-            end
+    def get_current_key block = false, i = nil, keys = '*"«»()@+-/abcdef'.unpack("C*")
+        begin (@eq||=EventQueue.new).each {|e| i = keys.index e.key if e.is_a? KeyDownEvent}
         end while block and i.nil?
         i
     end
 end
 class Emulator
 	def initialize path, ui
-        @video = @in = @out = ui.new @width = 64, @height = 32
+        @video = @in = @out = Object.const_get(ui).new @width = 64, @height = 32
 		@mem = (("PJJJPCGCCHPBPIPPBPBPJJPBBPIPBPPIPJPPBCEEPJPJPPJPBPPJPJJOJOJO"\
                 +"PIIIPOJJJOPIPIPPIPII").unpack("C*").collect{|x|(x-65)*16}.pack("C*")\
                 + ("\0" * ((@pc = 0x200) - 80))+File.open(path, 'rb'){ |f| f.read } \
@@ -50,8 +41,7 @@ class Emulator
 			end
 		end
 	end
-	def key_pressed mode
-		char = @in.get_current_key
+	def key_pressed mode, char = @in.get_current_key
 		test = (char.nil? or char.to_i != @v[f00])
 		@pc += 2 if (!mode && test) or (mode && !test)
 	end
@@ -106,4 +96,4 @@ class Emulator
 		true
 	end
 end
-Emulator.new(ARGV[0], GUI)
+Emulator.new ARGV[0], ARGV[1] == nil ? "Window" : ARGV[1]
