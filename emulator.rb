@@ -22,11 +22,12 @@ class GUI < Hash
     end
     def beep() end
     def get_current_key(block = false)
+        keys = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47] + (97..102).to_a
         i = nil
         begin
             @events.each do |event|
-                if event.is_a? Rubygame::KeyDownEvent then
-                    i = (event.key - 101)
+                if i.nil? and event.is_a? Rubygame::KeyDownEvent then
+                    i = keys.index event.key
                 end
             end
         end while block and i.nil?
