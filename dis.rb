@@ -54,6 +54,16 @@ def regs v
     end
     s
 end
+def start_debugging
+
+    File.open(@out, "w") { |f| f.write "" } if not @out.nil?
+end
+def debug_instruction
+    File.open(@out, "a") do |f|
+        instr = instruction @i
+        f.printf "%3s #{instr}#{" " * (15 - instr.size)}%4s\t#{regs @v}\n", @pc.to_s(16), @I.to_s(16)
+    end if not @out.nil?
+end
 if __FILE__ == $0
     program = File.open ARGV[0] { |file| file.read }
     pos = 0x200
