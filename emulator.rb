@@ -19,7 +19,7 @@ class Window < Hash
         @screen.draw_box_s(u[0], u[1], (0..2).map { c * 255 }).update
     end
     def beep() end
-    def get_current_key block = false, i = nil, keys = '*"«»()@+-/abcdef'.unpack("C*")
+    def get_current_key block = false, i = nil, keys = '*"«»()@+-/abcdef'.unpack("U*")
         begin (@eq||=EventQueue.new).each {|e| i = keys.index e.key if e.is_a? KeyDownEvent}
         end while block and i.nil?
         i
