@@ -1,20 +1,20 @@
 class Assembler
-    def initialize source, destination
+    def initialize
         @labels = {}
         @address = 0x200
         @result = []
-        @binary = ""
+        @binary = []
         @instructions = {
             /CLS/ => "00E0",
             /RET/ => "00EE",
             /SYS (\w+)/ => "0%3x",
             /JP (\w+)/ => "1%3x",
             /CALL (\w+)/ => "2%3x",
-            /SE V(\d+), (\d+)/ => "3%1x%2x",
-            /SNE V(\d+), (\d+)/ => "4%1x%2x",
+            /SE V(\d+), (\d+)/ => "3%1x%02x",
+            /SNE V(\d+), (\d+)/ => "4%1x%02x",
             /SE V(\d+), V(\d+)/ => "5%1x%1x0",
-            /LD V(\d+), (\d+)/ => "6%1x%2x",
-            /ADD V(\d+), (\d+)/ => "7%1x%2x",
+            /LD V(\d+), (\d+)/ => "6%1x%02x",
+            /ADD V(\d+), (\d+)/ => "7%1x%02x",
             /LD V(\d+), V(\d+)/ => "8%1x%1x0",
             /OR V(\d+), V(\d+)/ => "8%1x%1x1",
             /AND V(\d+), V(\d+)/ => "8%1x%1x2",
@@ -25,9 +25,9 @@ class Assembler
             /SUBN V(\d+), V(\d+)/ => "8%1x%1x7",
             /SHL V(\d+) {, V(\d+)}/ => "8%1x%1xE",
             /SNE V(\d+), V(\d+)/ => "9%1x%1x0",
-            /LD I, (\w+)/ => "A%3x",
-            /JP V0, (\w+)/ => "B%3x",
-            /RND V(\d+), (\d+)/ => "C%1x%2x",
+            /LD I, (\w+)/ => "A%03x",
+            /JP V0, (\w+)/ => "B%03x",
+            /RND V(\d+), (\d+)/ => "C%1x%02x",
             /DRW V(\d+), V(\d+), (\d+)/ => "D%1x%1x%1x",
             /SKP V(\d+)/ => "E%1x9E",
             /SKNP V(\d+)/ => "E%1xA1",
@@ -41,30 +41,51 @@ class Assembler
             /LD [I], V(\d+)/ => "F%1x55",
             /LD V(\d+), [I]/ => "F%1x65",
         }
-        File.open(source) do |f|
-            f.each_line { |line| parse_line line.chomp.split }
+    end
+    def parse data
+        if data.is_a? Array
+            data.each { |line| parse_line line }
+        else
+            data = data.gsub "\\n", "\n"
+            if data.include? "\n"
+                data.split("\n").each { |line| parse_line line }
+#            else
+#                File.open(source) do |f|
+#                    f.each_line { |line| parse_line line.chomp }
+#                end
+            end
         end
+        self
+    end
+    def output where = nil
         assemble
-        File.open(destination, 'wb') do |output|
-              output.write @binary
-        end
+#        assemble
+#        if where.nil?
+#            @binary
+#        else
+#            File.open(destination, 'wb') do |output|
+#                output.write @binary
+#            end
+#        end
+        @binary
     end
     def assemble
         @result.each do |instruction, parameters|
             parameters.collect! do |p|
-                !!(p =~ /^[-+]?[0-9]+$/)?p.to_i: @labels[p]
+                !!(p =~ /^[-+]?[0-9]+$/)?p.to_i : @labels[p]
             end
             str = sprintf instruction, *parameters
-            p instruction, parameters
-            @binary += [str].pack('H*')
+            @binary << str[0..1].to_i(16) << str[2..3].to_i(16)
         end
     end
     def parse_line line
+        p line
+        line = line.split(" ")
         if line.size > 0
             return if line[0][0] == ";"
             if line[0][-1..-1] == ":"
                 @labels[line[0].split(":")[0].upcase] = @address
-                parse_line line[1..-1]
+                parse_line line[1..-1] if line[1..-1].size > 0
                 return
             end
             line = line.collect!{|i| i.upcase }.join " "
@@ -74,4 +95,4 @@ class Assembler
         end
     end
 end
-Assembler.new *ARGV
+#p Assembler.new.parse(ARGV[0]).output(ARGV[1])

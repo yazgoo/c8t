@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <canvas id="screen" width="800" height="600"></canvas>
+    <textarea id="editor" style="width: 300px; height: 600px;">
+LD v0, 0
+LD v1, 0
+LD v5, 0
+loop:
+    LD v2, k
+    CALL multiply
+    DRW v0, v1, 5
+    ADD v0, 8
+    ADD v5, 1
+    JP loop
+multiply:
+    LD I, 0
+    SE v2, 0
+    call add_5
+    RET
+add_5:
+    LD v3, 5
+    LD v4, 1
+    ADD I, v3
+    SUB v2, v4
+    SE v2, 0
+    JP add_5
+    RET</textarea>
+<div style="float: left">
+    <script>
+for(var i = 0; i < 4; i++)
+{
+    for(var j = 0; j < 4; j++)
+    {
+        s = (4 * i + j).toString(16);
+    document.write('<input type="button" value="' + s
+            + '" onclick="window.key=0x' + s + '"/>')
+    }
+        document.write('<br/>')
+}
+    </script>
+    Pause:<input type="checkbox" id="pause"/>
+</div>
+    <script src="build.js"></script>
+  </body>
+</html>
