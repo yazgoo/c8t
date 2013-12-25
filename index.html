@@ -3,6 +3,7 @@
   <head>
   </head>
   <body>
+    <script src="build.js"></script>
     <canvas id="screen" width="800" height="600"></canvas>
     <textarea id="editor" style="width: 300px; height: 600px;">
 LD v0, 0
@@ -40,9 +41,22 @@ for(var i = 0; i < 4; i++)
     }
         document.write('<br/>')
 }
+    emulator = null
+    function launch() {
+        if(emulator != null) emulator.pause
+        emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
+    }
+    function launch2() {
+        if(emulator != null) emulator.pause
+        emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
+    }
     </script>
-    Pause:<input type="checkbox" id="pause"/>
+    Pause:<input type="checkbox" id="pause"/><br/>
+    <input type="button" value="launch from source" onclick="launch()"/>
+    <br/>
+    <input type="button" value="launch from xxd -p" onclick="launch2()"/>
+    <br/>
+    <input type="button" value="clear text box" onclick="document.getElementById('editor').value=''"/>
 </div>
-    <script src="build.js"></script>
   </body>
 </html>
