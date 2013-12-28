@@ -1,11 +1,124 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <style>
+input[type=button] {
+    border: 0;
+}
+body {
+    background-color: black;
+}
+#key {
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+}
+#keys_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    width: 200px;
+    padding: 10px;
+    height: 635px;
+    font-family: sans;
+    font-size: 15px;
+    background-color: white;
+}
+#screen_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    background-color: #999999;
+}
+#editor_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    background-color: white;
+}
+#editor {
+    width: 220px;
+    height: 600px;
+    border: 0;"
+}
+#description {
+    overflow: auto;
+    height: 400px;
+    width: 200px;
+}
+  </style>
   </head>
   <body>
     <script src="build.js"></script>
-    <canvas id="screen" width="800" height="600"></canvas>
-    <textarea id="editor" style="width: 300px; height: 600px;">
+    <script src="pack.js"></script>
+<div id="keys_container">
+    <script>
+window.key = null
+for(var i = 0; i < 4; i++)
+{
+    for(var j = 0; j < 4; j++)
+    {
+        s = (4 * i + j).toString(16);
+    document.write('<input id="key" type="button" value="' + s
+            + '" onclick="window.key=0x' + s + '"/>')
+    }
+        document.write('<br/>')
+}
+    emulator = null
+    function launch() {
+        if(emulator != null) emulator.pause
+        emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
+    }
+    function launch2() {
+        if(emulator != null) emulator.pause
+        emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
+    }
+    function launch3(select) {
+        game = pack[select]
+        if(game == undefined) return;
+        if(emulator != null) emulator.pause
+        hex = game['content']
+        document.getElementById('editor').value = hex
+        var description = game['description'];
+        if(description == null) description = "";
+        description.replace("\n", "<br/>")
+        document.getElementById('description').innerHTML = 
+        "<b>Title</b><br/>" +game['title'] + "<br/>"
+        + "<b>Author</b><br/>" +game['author'] + "<br/>"
+        + "<b>Date</b><br/>" +game['date'] + "<br/>"
+        + "<b>Description</b><br/>" + description + ""
+        emulator = Opal.Runner.$new().$run2(hex);
+    }
+    </script>
+    Pause:<input type="checkbox" id="pause"/><br/>
+    <input type="button" value="clear text box"
+    onclick="document.getElementById('editor').value=''"/>
+    <br/>
+    Launch from:<br/>
+    <select onchange="launch3(this.value)">
+        <option>program</option>
+    <script>
+for(k in pack)
+{
+
+        document.write("<option value='"+ k +"'>" + pack[k]['short'] + "</option>");
+}
+    </script>
+    </select>
+    <br/>
+    <input type="button" value="source" onclick="launch()"/>
+    <input type="button" value=" xxd -p" onclick="launch2()"/>
+    <br/>
+    <div id="description"></div>
+</div>
+    <div id="screen_container">
+        <canvas id="screen" width="800" height="600"
+            style="background-color: black;"></canvas>
+    </div>
+    <div id="editor_container">
+    <textarea id="editor">
 LD v0, 0
 LD v1, 0
 LD v5, 0
@@ -29,34 +142,6 @@ add_5:
     SE v2, 0
     JP add_5
     RET</textarea>
-<div style="float: left">
-    <script>
-for(var i = 0; i < 4; i++)
-{
-    for(var j = 0; j < 4; j++)
-    {
-        s = (4 * i + j).toString(16);
-    document.write('<input type="button" value="' + s
-            + '" onclick="window.key=0x' + s + '"/>')
-    }
-        document.write('<br/>')
-}
-    emulator = null
-    function launch() {
-        if(emulator != null) emulator.pause
-        emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
-    }
-    function launch2() {
-        if(emulator != null) emulator.pause
-        emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
-    }
-    </script>
-    Pause:<input type="checkbox" id="pause"/><br/>
-    <input type="button" value="launch from source" onclick="launch()"/>
-    <br/>
-    <input type="button" value="launch from xxd -p" onclick="launch2()"/>
-    <br/>
-    <input type="button" value="clear text box" onclick="document.getElementById('editor').value=''"/>
 </div>
   </body>
 </html>

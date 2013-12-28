@@ -21,16 +21,16 @@ class Window < Hash
     end
     def beep() end
     attr_accessor :eq, :block, :on_unblock
-    def unqueue a
+    def unqueue a = self
         i = nil
         keys = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47, 97, 98, 99, 100, 101, 102]
         (a.eq||=EventQueue.new).each {|e| i = keys.index e.key if e.is_a? KeyDownEvent}
         if a.block
             if i.nil?
                 if ENV.size == 0
-                    `setTimeout(function() { $opal.a.$unqueue($opal.a) }, 20)`
+                    `setTimeout(function() { $opal.a.$unqueue($opal.a) }, 10)`
                 else
-                    sleep 0.02
+                    sleep 0.01
                     unqueue a
                 end
             else
@@ -44,13 +44,13 @@ class Window < Hash
         @on_unblock = on_unblock
         if !block
             @ready = true
-            return unqueue block
+            return unqueue
         else
             if ENV.size == 0
                 `$opal.a = self`
-                `setTimeout(function() { $opal.a.$unqueue($opal.a) }, 20)`
+                `setTimeout(function() { $opal.a.$unqueue($opal.a) }, 10)`
             else
-                sleep 0.02
+                sleep 0.01
                 unqueue self
             end
         end
@@ -58,7 +58,9 @@ class Window < Hash
 end
 class Emulator
 	def initialize str, ui
-        @video = @in = @out = Object.const_get(ui).new(@width = 64, @height = 32)
+        @width = 64
+        @height = 32
+        @video = @in = @out = Object.const_get(ui).new(@width, @height)
 		@mem = ("PJJJPCGCCHPBPIPPBPBPJJPBBPIPBPPIPJPPBCEEPJPJPPJPBPPJPJJOJOJOPIIIPOJJJOPIPIPPIPII").chars.map(&:ord).collect{|x|(x-65)*16}
         @mem = @mem.concat([0] * ((@pc = 0x200) - 80)).concat(str)
         @mem = @mem.concat([0] * 1000)#).chars.map(&:ord)
@@ -75,9 +77,9 @@ class Emulator
         b.run if b.ready and not b.pause
         if ENV.size == 0
             b.pause = `document.getElementById('pause').checked`
-            `setTimeout(function() {b.$run_multiple($opal.b)}, 20)`
+            `setTimeout(function() {b.$run_multiple($opal.b)}, 10)`
         else
-            sleep 0.02
+            sleep 0.01
             run_multiple b
         end
     end
@@ -95,6 +97,7 @@ class Emulator
         end
     end
 	def key_pressed mode, char = @in.get_current_key
+        f00 = (@i & 0xf00) >> (2 * 4)
 		test = (char.nil? or char.to_i != @v[f00])
         @pc += 2 if ((!mode && test) || (mode && !test))
 	end
@@ -125,7 +128,7 @@ class Emulator
         ff = @i & 0xff
         fff = @i & 0xfff
         return if i == 0
-		if i == 0xe0 then (0..@width-1).to_a.product((0..@height-1).to_a) { |xy| @out.write(xy, 0) }; @video = {} end
+		if i == 0xe0 then @width.times { |x| @height.times { |y| @out.write([x,y], 0) }}; @video = {} end
 		if i == 0xee then @pc = @stack.pop end
 		case f000
 		when 8
@@ -137,8 +140,16 @@ class Emulator
 			when 6 then @v[0xf] = (@v[f00] & 1)
 			when 0xe then @v[0xf] = ((@v[f00] & 0xe000) >> 15)
 			end
-		when 1,2 then @stack.push(@pc) if(f000==2); @pc = fff; return false
-		when 3,4,5,9 then @pc += 2 if @v[f00].send ([3,5].include?(f000)?'=':'!')+'=', [3,4].include?(f000)? ff : @v[f0]
+		when 1,2 then
+            if(f000 == 2)
+                @stack.push(@pc)
+            end
+            @pc = fff
+            return false
+        when 3,5 then 
+            @pc += 2 if @v[f00] == ([3,4].include?(f000)? ff : @v[f0])
+        when 5,9 then @pc += 2 if @v[f00] != ([3,4].include?(f000)? ff : @v[f0])
+		#when 3,4,5,9 then @pc += 2 if Integer.new(@v[f00]).send ([3,5].include?(f000)?'=':'!')+'=', [3,4].include?(f000)? ff : @v[f0]
 		when 6,7 then if f000 == 6 then @v[f00]=ff else @v[f00] += ff end
 		when 0xb then @pc = fff + @v[0]; return false
 		when 0xc then @v[f00] = rand(0..255) & ff
