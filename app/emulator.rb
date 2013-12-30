@@ -107,7 +107,7 @@ class Emulator
         f00 = (@i & 0xf00) >> (2 * 4)
         f0 = (@i & 0xf0) >> 4
 		@mem[@I..(@I+f-1)].each_with_index do |line, dy|
-			(0..7).each do |dx|
+			8.times do |dx|
 				xy = [(@v[f00] + dx) % @width, (@v[f0] + dy) % @height]
 				(@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])
 				@out.write xy, @video[xy][1]
@@ -152,7 +152,7 @@ class Emulator
 		#when 3,4,5,9 then @pc += 2 if Integer.new(@v[f00]).send ([3,5].include?(f000)?'=':'!')+'=', [3,4].include?(f000)? ff : @v[f0]
 		when 6,7 then if f000 == 6 then @v[f00]=ff else @v[f00] += ff end
 		when 0xb then @pc = fff + @v[0]; return false
-		when 0xc then @v[f00] = rand(0..255) & ff
+		when 0xc then @v[f00] = rand(0.255) & ff
 		when 0xa then @I = fff
 		when 0xd then draw
 		when 0xe then key_pressed(ff == 0x9e) if [0xa1,0x9e].include? ff

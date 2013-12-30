@@ -4,11 +4,12 @@ class Assembler
         @address = 0x200
         @result = []
         @binary = []
+        @text = []
         @instructions = {
             /CLS/ => "00E0",
             /RET/ => "00EE",
-            /SYS (\w+)/ => "0%3x",
-            /JP (\w+)/ => "1%3x",
+            /SYS (\w+)/ => "0%03x",
+            /JP (\w+)/ => "1%03x",
             /CALL (\w+)/ => "2%3x",
             /SE V(\d+), (\d+)/ => "3%1x%02x",
             /SNE V(\d+), (\d+)/ => "4%1x%02x",
@@ -41,6 +42,15 @@ class Assembler
             /LD [I], V(\d+)/ => "F%1x55",
             /LD V(\d+), [I]/ => "F%1x65",
         }
+#        @reverse_instructions = Hash[@reverse_instructions.to_a.collect do |k, v|
+#            [ "lol" + k.gsub("%1x", ".").gsub("%02x", "..")
+#              .gsub("%03x", "..."), v ]
+#        end]
+        @reverse_instructions = Hash[@instructions.to_a.collect(&:reverse)].collect do |k, v|
+            [ k.gsub("%1x", "(.)").gsub("%02x", "(..)")
+              .gsub("%03x", "(...)"), v ]
+        end
+        @reverse_instructions = Hash[@reverse_instructions]
     end
     def parse data
         if data.is_a? Array
@@ -56,6 +66,25 @@ class Assembler
             end
         end
         self
+    end
+    def unparse data
+        if data.is_a? Array
+            data.each { |i| parse_instruction i }
+        else
+            data = data.gsub("\\n", "").gsub "\\r", ""
+            data.scan(/..../) { |i| parse_instruction i }
+        end
+        @text.join("\n")
+    end
+    def parse_instruction i
+        i.upcase!
+        @reverse_instructions.keys.each do |re|
+            if !!(m = i.match(re))
+                @text << sprintf(@reverse_instructions[re].to_s[7..-2].gsub('(\\d+)', '%d').gsub('(\\w+)', '%d'), *(m.to_a[1..-1].map{|x| x.to_i(16)}))
+                return
+            end
+        end
+        @text << sprintf(".data %d", i.to_i(16))
     end
     def output where = nil
         assemble
@@ -79,7 +108,6 @@ class Assembler
         end
     end
     def parse_line line
-        p line
         line = line.split(" ")
         if line.size > 0
             return if line[0][0] == ";"
