@@ -118,7 +118,11 @@ class Assembler
             end
             line = line.collect!{|i| i.upcase }.join " "
             r = @instructions.keys.map{ |re| line.match(re)?re : nil }.compact.first
-            @result << [@instructions[r], line.match(r).to_a[1..-1]]
+            if r.nil?
+                @result << ["%04x", [line.split.last.to_i.to_s]]
+            else
+                @result << [@instructions[r], line.match(r).to_a[1..-1]]
+            end
             @address += 2
         end
     end
