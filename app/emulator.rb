@@ -112,6 +112,8 @@ class Emulator
 				(@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])
 				@out.write xy, @video[xy][1]
 				@v[0xf] = 1 if @video[xy].delete_at(0) == 1 and @video[xy][0] == 0
+                p xy
+                p @video[xy]
 			end
 		end
 	end
