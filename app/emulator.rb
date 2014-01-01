@@ -148,11 +148,10 @@ class Emulator
             return false
         when 3,5 then 
             @pc += 2 if @v[f00] == ([3,4].include?(f000)? ff : @v[f0])
-        when 5,9 then @pc += 2 if @v[f00] != ([3,4].include?(f000)? ff : @v[f0])
-		#when 3,4,5,9 then @pc += 2 if Integer.new(@v[f00]).send ([3,5].include?(f000)?'=':'!')+'=', [3,4].include?(f000)? ff : @v[f0]
+        when 5,9 then @pc += 2 if @v[f00] != ([3,4].include?(f000)? ff : @v[f0]) #when 3,4,5,9 then @pc += 2 if Integer.new(@v[f00]).send ([3,5].include?(f000)?'=':'!')+'=', [3,4].include?(f000)? ff : @v[f0]
 		when 6,7 then if f000 == 6 then @v[f00]=ff else @v[f00] += ff end
 		when 0xb then @pc = fff + @v[0]; return false
-		when 0xc then @v[f00] = rand(0.255) & ff
+		when 0xc then @v[f00] = rand(255) & ff
 		when 0xa then @I = fff
 		when 0xd then draw
 		when 0xe then key_pressed(ff == 0x9e) if [0xa1,0x9e].include? ff
@@ -166,8 +165,8 @@ class Emulator
 			when 0x29 then @I = @v[f00] * 5
 			when 0x07 then @v[f00] = @DT
 			when 0x33 then sprintf("%03d",@v[f00]).split("").each_with_index { |v,x| @mem[@I+x] = v }
-			when 0x55 then (0..f00).each { |x| @mem[x + @I] = @v[x] }
-			when 0x65 then (0..f00).each { |x| @v[x] = @mem[x + @I].to_i }
+			when 0x55 then f00.times.to_a.each { |x| @mem[x + @I] = @v[x] }
+			when 0x65 then f00.times.to_a.each { |x| @v[x] = @mem[x + @I].to_i }
 			end
 		end
 		true

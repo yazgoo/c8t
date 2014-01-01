@@ -1,0 +1,47 @@
+input[type=button] {
+    border: 1px solid black;
+}
+body {
+    background-color: black;
+}
+#key {
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+}
+#keys_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    width: 200px;
+    padding: 10px;
+    height: 635px;
+    font-family: sans;
+    font-size: 15px;
+    background-color: white;
+}
+#screen_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    background-color: #999999;
+}
+#editor_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    background-color: white;
+}
+#editor {
+    width: 200px;
+    height: 600px;
+    border: 0;"
+}
+#description {
+    overflow: auto;
+    height: 400px;
+    width: 200px;
+}
+

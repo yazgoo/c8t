@@ -1,10 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="app.css"/>
-    <script src="/build.js"></script>
+  <style>
+input[type=button] {
+    border: 0;
+}
+body {
+    background-color: black;
+}
+#key {
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+}
+#keys_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    width: 200px;
+    padding: 10px;
+    height: 635px;
+    font-family: sans;
+    font-size: 15px;
+    background-color: white;
+}
+#screen_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    background-color: #999999;
+}
+#editor_container {
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    background-color: white;
+}
+#editor {
+    width: 220px;
+    height: 600px;
+    border: 0;"
+}
+#description {
+    overflow: auto;
+    height: 400px;
+    width: 200px;
+}
+  </style>
   </head>
   <body>
+    <script src="build.js"></script>
     <script src="pack.js"></script>
 <div id="keys_container">
     <script>
@@ -32,8 +79,8 @@ for(var i = 0; i < 4; i++)
         game = pack[select]
         if(game == undefined) return;
         if(emulator != null) emulator.pause
-        text = Opal.Runner.$new().$disassemble(game['content'])
-        document.getElementById('editor').value = text
+        hex = game['content']
+        document.getElementById('editor').value = hex
         var description = game['description'];
         if(description == null) description = "";
         description.replace("\n", "<br/>")
@@ -42,7 +89,7 @@ for(var i = 0; i < 4; i++)
         + "<b>Author</b><br/>" +game['author'] + "<br/>"
         + "<b>Date</b><br/>" +game['date'] + "<br/>"
         + "<b>Description</b><br/>" + description + ""
-        emulator = Opal.Runner.$new().$run(text);
+        emulator = Opal.Runner.$new().$run2(hex);
     }
     </script>
     Pause:<input type="checkbox" id="pause"/><br/>

@@ -10,7 +10,7 @@ class Assembler
             /RET/ => "00EE",
             /SYS (\w+)/ => "0%03x",
             /JP (\w+)/ => "1%03x",
-            /CALL (\w+)/ => "2%3x",
+            /CALL (\w+)/ => "2%03x",
             /SE V(\d+), (\d+)/ => "3%1x%02x",
             /SNE V(\d+), (\d+)/ => "4%1x%02x",
             /SE V(\d+), V(\d+)/ => "5%1x%1x0",
@@ -77,10 +77,12 @@ class Assembler
         @text.join("\n")
     end
     def parse_instruction i
-        i.upcase!
+        i = i.upcase
         @reverse_instructions.keys.each do |re|
-            if !!(m = i.match(re))
-                @text << sprintf(@reverse_instructions[re].to_s[7..-2].gsub('(\\d+)', '%d').gsub('(\\w+)', '%d'), *(m.to_a[1..-1].map{|x| x.to_i(16)}))
+            if !!(m = i.match(Regexp.new(re)))
+                ins = @reverse_instructions[re].to_s
+                ins = ins[7..-2]if ins.start_with? "("
+                @text << sprintf(ins.to_s.gsub('(\\d+)', '%d').gsub('(\\w+)', '%d'), *(m.to_a[1..-1].map{|x| x.to_i(16)}))
                 return
             end
         end
