@@ -134,7 +134,9 @@ class Emulator
 		when 8
 			case f
 			when 0 then @v[f00] = @v[f0]
-			when 1,2,3 then @v[f00] = @v[f00].send ['|','&','^'][f-1], @v[f0]
+            when 1 then @v[f00] = @v[f00] | @v[f0]
+            when 2 then @v[f00] = @v[f00] & @v[f0]
+            when 3 then @v[f00] = @v[f00] ^ @v[f0] # when 1,2,3 then @v[f00] = @v[f00].send ['|','&','^'][f-1], @v[f0]
 			when 4 then a = (@v[f0]+@v[f00]);@v[15] = a != (@v[f00]=(a%256))? 1 : 0
 			when 5 then @v[0xf] = @v[f00] > @v[f0] ? 1 : 0; @v[f00] = @v[f00] - @v[f0]; #puts "v#{f00} -= #{@v[f0]} => #{@v[f00]}"
 			when 6 then @v[0xf] = (@v[f00] & 1)
@@ -161,7 +163,9 @@ class Emulator
 			when 0x0a then @ready = false; @in.get_current_key(
                 true,
                 Proc.new { |e| @v[f00] = e; @ready = true })
-			when 21,24 then instance_variable_set "@#{ff==24?'S':'D'}T", @v[f00]
+            when 21 then @ST = @v[f00]
+            when 24 then @DT = @v[f00]
+			#when 21,24 then instance_variable_set "@#{ff==24?'S':'D'}T", @v[f00]
 			when 0x29 then @I = @v[f00] * 5
 			when 0x07 then @v[f00] = @DT
 			when 0x33 then sprintf("%03d",@v[f00]).split("").each_with_index { |v,x| @mem[@I+x] = v }

@@ -7,6 +7,7 @@
   <body>
     <script src="pack.js"></script>
 <div id="keys_container">
+    <fieldset><legend>Keyboard</legend>
     <script>
 window.key = null
 for(var i = 0; i < 4; i++)
@@ -38,18 +39,18 @@ for(var i = 0; i < 4; i++)
         if(description == null) description = "";
         description.replace("\n", "<br/>")
         document.getElementById('description').innerHTML = 
-        "<b>Title</b><br/>" +game['title'] + "<br/>"
-        + "<b>Author</b><br/>" +game['author'] + "<br/>"
-        + "<b>Date</b><br/>" +game['date'] + "<br/>"
+        "<b>Title</b> " +game['title'] + "<br/>"
+        + "<b>Author</b> " +game['author'] + "<br/>"
+        + "<b>Date</b> " +game['date'] + "<br/>"
         + "<b>Description</b><br/>" + description + ""
         emulator = Opal.Runner.$new().$run(text);
     }
     </script>
-    Pause:<input type="checkbox" id="pause"/><br/>
-    <input type="button" value="clear text box"
-    onclick="document.getElementById('editor').value=''"/>
+</fieldset>
+    Pause:<input type="checkbox" id="pause"/>
     <br/>
-    Launch from:<br/>
+    <fieldset>
+        <legend>Launch from</legend>
     <select onchange="launch3(this.value)">
         <option>program</option>
     <script>
@@ -63,6 +64,7 @@ for(k in pack)
     <br/>
     <input type="button" value="source" onclick="launch()"/>
     <input type="button" value=" xxd -p" onclick="launch2()"/>
+</fieldset>
     <br/>
     <div id="description"></div>
 </div>
@@ -71,6 +73,7 @@ for(k in pack)
             style="background-color: black;"></canvas>
     </div>
     <div id="editor_container">
+        <input type="button" value="clear" onclick="document.getElementById('editor').value=''"/><br/>
     <textarea id="editor">
 LD v0, 0
 LD v1, 0
