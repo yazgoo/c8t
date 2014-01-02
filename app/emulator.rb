@@ -151,7 +151,6 @@ class Emulator
 			when 0xe then @v[0xf] = ((@v[f00] & 0xe000) >> 15)
 			end
 		when 1,2 then
-            puts "jump #{f000} to #{fff} from #{@pc}"
             if(f000 == 2)
                 @stack.push(@pc)
             end
