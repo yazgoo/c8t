@@ -22,9 +22,9 @@ class Assembler
             /XOR V(\d+), V(\d+)/ => "8%1x%1x3",
             /ADD V(\d+), V(\d+)/ => "8%1x%1x4",
             /SUB V(\d+), V(\d+)/ => "8%1x%1x5",
-            /SHR V(\d+) {, V(\d+)}/ => "8%1x%1x6",
+            #/SHR V(\d+) {, V(\d+)}/ => "8%1x%1x6",
             /SUBN V(\d+), V(\d+)/ => "8%1x%1x7",
-            /SHL V(\d+) {, V(\d+)}/ => "8%1x%1xE",
+            #/SHL V(\d+) {, V(\d+)}/ => "8%1x%1xE",
             /SNE V(\d+), V(\d+)/ => "9%1x%1x0",
             /LD I, (\w+)/ => "A%03x",
             /JP V0, (\w+)/ => "B%03x",
@@ -39,8 +39,8 @@ class Assembler
             /ADD I, V(\d+)/ => "F%1x1E",
             /LD F, V(\d+)/ => "F%1x29",
             /LD B, V(\d+)/ => "F%1x33",
-            /LD [I], V(\d+)/ => "F%1x55",
-            /LD V(\d+), [I]/ => "F%1x65",
+            /LD -I-, V(\d+)/ => "F%1x55",
+            /LD V(\d+), -I-/ => "F%1x65",
         }
 #        @reverse_instructions = Hash[@reverse_instructions.to_a.collect do |k, v|
 #            [ "lol" + k.gsub("%1x", ".").gsub("%02x", "..")
@@ -48,7 +48,8 @@ class Assembler
 #        end]
         @reverse_instructions = Hash[@instructions.to_a.collect(&:reverse)].collect do |k, v|
             [ k.gsub("%1x", "(.)").gsub("%02x", "(..)")
-              .gsub("%03x", "(...)"), v ]
+              .gsub("%03x", "(...)").gsub('[', ".")
+              .gsub(']', "."), v ]
         end
         @reverse_instructions = Hash[@reverse_instructions]
     end
@@ -119,7 +120,7 @@ class Assembler
                 return
             end
             line = line.collect!{|i| i.upcase }.join " "
-            r = @instructions.keys.map{ |re| line.match(re)?re : nil }.compact.first
+            r = @instructions.keys.map{ |re| (line.match(re) and re.to_s.split.size == line.split.size)?re : nil }.compact.first
             if r.nil?
                 @result << ["%04x", [line.split.last.to_i.to_s]]
             else

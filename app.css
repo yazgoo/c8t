@@ -16,8 +16,8 @@ body {
     border: 1px solid white;
     border-radius: 0px;
     padding: 10px;
-    height: 635px;
-    font-family: arial;
+    height: 595px;
+    font-family: sans-serif;
     font-size: 15px;
     background-color: white;
 }
@@ -33,11 +33,12 @@ body {
     border: 1px solid white;
     border-radius: 0px;
     padding: 5px;
+    height: 605px;
     background-color: white;
 }
 #editor {
     width: 200px;
-    height: 600px;
+    height: 570px;
     border: 0;"
 }
 #description {

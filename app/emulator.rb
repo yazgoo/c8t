@@ -70,13 +70,17 @@ class Emulator
 #		end
         @ready = true
         @pause = false
+        @step = false
+        @log = false
 	end
-    attr_accessor :ready, :pause
+    attr_accessor :ready, :pause, :step, :log
     def run_multiple b = self
         `$opal.b = b` if ENV.size == 0
-        b.run if b.ready and not b.pause
+        b.run if b.ready and (not b.pause or (b.pause and b.step))
+        b.step = false
         if ENV.size == 0
             b.pause = `document.getElementById('pause').checked`
+            b.log = `document.getElementById('log').checked`
             `setTimeout(function() {b.$run_multiple($opal.b)}, 10)`
         else
             sleep 0.01
@@ -112,8 +116,6 @@ class Emulator
 				(@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])
 				@out.write xy, @video[xy][1]
 				@v[0xf] = 1 if @video[xy].delete_at(0) == 1 and @video[xy][0] == 0
-                p xy
-                p @video[xy]
 			end
 		end
 	end
@@ -122,10 +124,10 @@ class Emulator
 #		else super end
 #	end
 	def run_instruction i
-        #printf "run pc=%d; i=%04x; v=[%s]; I=%d\n", ((@pc - 0x200) / 2), @i, @v.join(", "), @I
+        printf "run pc=%d; i=%04x; v=[%s]; I=%d\n", ((@pc - 0x200) / 2), @i, @v.join(", "), @I if self.log
         f000 = (@i & 0xf000) >> (3 * 4)
         f00 = (@i & 0xf00) >> (2 * 4)
-        f0 = (@i & 0xf0) >> ( 4)
+        f0 = (@i & 0xf0) >> 4
         f = @i & 0xf
         ff = @i & 0xff
         fff = @i & 0xfff

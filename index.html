@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" type="text/css" href="app.css"/>
     <script src="/build.js"></script>
+    <title>c8t</title>
   </head>
   <body>
     <script src="pack.js"></script>
@@ -39,7 +40,7 @@ for(var i = 0; i < 4; i++)
         if(description == null) description = "";
         description.replace("\n", "<br/>")
         document.getElementById('description').innerHTML = 
-        "<b>Title</b> " +game['title'] + "<br/>"
+        "<b>" +game['title'] + "</b><br/>"
         + "<b>Author</b> " +game['author'] + "<br/>"
         + "<b>Date</b> " +game['date'] + "<br/>"
         + "<b>Description</b><br/>" + description + ""
@@ -47,8 +48,13 @@ for(var i = 0; i < 4; i++)
     }
     </script>
 </fieldset>
-    Pause:<input type="checkbox" id="pause"/>
-    <br/>
+<fieldset>
+        <legend>Control</legend>
+    pause<input type="checkbox" id="pause"/>
+    <input type="button" id="step" value="step"
+    onclick="if(emulator != null) emulator.step = true"/>
+    log<input type="checkbox" id="log"/>
+</fieldset>
     <fieldset>
         <legend>Launch from</legend>
     <select onchange="launch3(this.value)">
