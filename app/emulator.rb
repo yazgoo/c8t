@@ -128,7 +128,7 @@ class Emulator
 #		else super end
 #	end
 	def run_instruction i
-        printf "run pc=%d; i=%04x; v=[%s]; I=%d\n", ((@pc - 0x200) / 2), @i, @v.join(", "), @I if self.log
+        printf "run pc=%d; i=%04x; v=[%s]; I=%d\n", @pc, @i, @v.join(", "), @I if self.log
         f000 = (@i & 0xf000) >> (3 * 4)
         f00 = (@i & 0xf00) >> (2 * 4)
         f0 = (@i & 0xf0) >> 4
@@ -151,6 +151,7 @@ class Emulator
 			when 0xe then @v[0xf] = ((@v[f00] & 0xe000) >> 15)
 			end
 		when 1,2 then
+            puts "jump #{f000} to #{fff} from #{@pc}"
             if(f000 == 2)
                 @stack.push(@pc)
             end
@@ -167,7 +168,7 @@ class Emulator
 		when 0xe then key_pressed(ff == 0x9e) if [0xa1,0x9e].include? ff
 		when 0xf
 			case ff
-			when 0x1e then @I += @v[f00]
+			when 0x1e then @I = @I + @v[f00]
 			when 0x0a then @ready = false; @in.get_current_key(
                 true,
                 Proc.new { |e| @v[f00] = e; @ready = true })
@@ -177,8 +178,8 @@ class Emulator
 			when 0x29 then @I = @v[f00] * 5
 			when 0x07 then @v[f00] = @DT
 			when 0x33 then sprintf("%03d",@v[f00]).split("").each_with_index { |v,x| @mem[@I+x] = v }
-			when 0x55 then f00.times.to_a.each { |x| @mem[x + @I] = @v[x] }
-			when 0x65 then f00.times.to_a.each { |x| @v[x] = @mem[x + @I].to_i }
+			when 0x55 then (f00+1).times { |x| @mem[x + @I] = @v[x] }
+			when 0x65 then (f00+1).times { |x| @v[x] = @mem[x + @I].to_i }
 			end
 		end
 		true
