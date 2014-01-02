@@ -12,7 +12,7 @@ class Window < Hash
     require 'rubygame'
     include Rubygame
     def initialize x, y, w = 800, h = 600
-        @dxy = [w/x, h/y]
+        @dxy = [(w/x).to_i, (h/y).to_i]
         @screen = Screen.new (@dxy).zip([x, y]).map{|i,j| i*j }
     end
     def write xy, c
@@ -23,7 +23,8 @@ class Window < Hash
     attr_accessor :eq, :block, :on_unblock
     def unqueue a = self
         i = nil
-        keys = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47, 97, 98, 99, 100, 101, 102]
+        keys = [42, 34, 171, 187, 40, 41, 64, 43,
+                45, 47, 97, 98, 99, 100, 101, 102]
         (a.eq||=EventQueue.new).each {|e| i = keys.index e.key if e.is_a? KeyDownEvent}
         if a.block
             if i.nil?
@@ -110,7 +111,10 @@ class Emulator
         f = @i & 0xf
         f00 = (@i & 0xf00) >> (2 * 4)
         f0 = (@i & 0xf0) >> 4
-		@mem[@I..(@I+f-1)].each_with_index do |line, dy|
+        #p @I
+        #p @mem[@I] 
+        #exit
+        @mem[@I..(@I+f-1)].each_with_index do |line, dy|
 			8.times do |dx|
 				xy = [(@v[f00] + dx) % @width, (@v[f0] + dy) % @height]
 				(@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])

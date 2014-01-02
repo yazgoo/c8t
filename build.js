@@ -10773,9 +10773,9 @@ args = $slice.call(arguments, 0);
       self.result = [];
       self.binary = [];
       self.text = [];
-      self.instructions = $hash(/CLS/, "00E0", /RET/, "00EE", /SYS (\w+)/, "0%03x", /JP (\w+)/, "1%03x", /CALL (\w+)/, "2%03x", /SE V(\d+), (\d+)/, "3%1x%02x", /SNE V(\d+), (\d+)/, "4%1x%02x", /SE V(\d+), V(\d+)/, "5%1x%1x0", /LD V(\d+), (\d+)/, "6%1x%02x", /ADD V(\d+), (\d+)/, "7%1x%02x", /LD V(\d+), V(\d+)/, "8%1x%1x0", /OR V(\d+), V(\d+)/, "8%1x%1x1", /AND V(\d+), V(\d+)/, "8%1x%1x2", /XOR V(\d+), V(\d+)/, "8%1x%1x3", /ADD V(\d+), V(\d+)/, "8%1x%1x4", /SUB V(\d+), V(\d+)/, "8%1x%1x5", /SUBN V(\d+), V(\d+)/, "8%1x%1x7", /SNE V(\d+), V(\d+)/, "9%1x%1x0", /LD I, (\w+)/, "A%03x", /JP V0, (\w+)/, "B%03x", /RND V(\d+), (\d+)/, "C%1x%02x", /DRW V(\d+), V(\d+), (\d+)/, "D%1x%1x%1x", /SKP V(\d+)/, "E%1x9E", /SKNP V(\d+)/, "E%1xA1", /LD V(\d+), DT/, "F%1x07", /LD V(\d+), K/, "F%1x0A", /LD DT, V(\d+)/, "F%1x15", /LD ST, V(\d+)/, "F%1x18", /ADD I, V(\d+)/, "F%1x1E", /LD F, V(\d+)/, "F%1x29", /LD B, V(\d+)/, "F%1x33", /LD -I-, V(\d+)/, "F%1x55", /LD V(\d+), -I-/, "F%1x65");
+      self.instructions = $hash(/CLS/, "00E0", /RET/, "00EE", /JP (\w+)/, "1%03x", /CALL (\w+)/, "2%03x", /SE V(\d+), (\d+)/, "3%1x%02x", /SNE V(\d+), (\d+)/, "4%1x%02x", /SE V(\d+), V(\d+)/, "5%1x%1x0", /LD V(\d+), (\d+)/, "6%1x%02x", /ADD V(\d+), (\d+)/, "7%1x%02x", /LD V(\d+), V(\d+)/, "8%1x%1x0", /OR V(\d+), V(\d+)/, "8%1x%1x1", /AND V(\d+), V(\d+)/, "8%1x%1x2", /XOR V(\d+), V(\d+)/, "8%1x%1x3", /ADD V(\d+), V(\d+)/, "8%1x%1x4", /SUB V(\d+), V(\d+)/, "8%1x%1x5", /SUBN V(\d+), V(\d+)/, "8%1x%1x7", /SNE V(\d+), V(\d+)/, "9%1x%1x0", /LD I, (\w+)/, "A%03x", /JP V0, (\w+)/, "B%03x", /RND V(\d+), (\d+)/, "C%1x%02x", /DRW V(\d+), V(\d+), (\d+)/, "D%1x%1x%1x", /SKP V(\d+)/, "E%1x9E", /SKNP V(\d+)/, "E%1xA1", /LD V(\d+), DT/, "F%1x07", /LD V(\d+), K/, "F%1x0A", /LD DT, V(\d+)/, "F%1x15", /LD ST, V(\d+)/, "F%1x18", /ADD I, V(\d+)/, "F%1x1E", /LD F, V(\d+)/, "F%1x29", /LD B, V(\d+)/, "F%1x33", /LD -I-, V(\d+)/, "F%1x55", /LD V(\d+), -I-/, "F%1x65");
       self.reverse_instructions = ($a = ($b = (($c = $scope.Hash) == null ? $opal.cm('Hash') : $c)['$[]'](($c = ($d = self.instructions.$to_a()).$collect, $c._p = "reverse".$to_proc(), $c).call($d))).$collect, $a._p = (TMP_1 = function(k, v){var self = TMP_1._s || this;if (k == null) k = nil;if (v == null) v = nil;
-      return [k.$gsub("%1x", "(.)").$gsub("%02x", "(..)").$gsub("%03x", "(...)").$gsub("[", ".").$gsub("]", "."), v]}, TMP_1._s = self, TMP_1), $a).call($b);
+      return [k.$gsub("%1x", "(.)").$gsub("%02x", "(..)").$gsub("%03x", "(...)"), v]}, TMP_1._s = self, TMP_1), $a).call($b);
       return self.reverse_instructions = (($a = $scope.Hash) == null ? $opal.cm('Hash') : $a)['$[]'](self.reverse_instructions);
     };
 
@@ -11018,7 +11018,7 @@ if (p == null) p = nil;
       if (h == null) {
         h = 600
       }
-      self.dxy = [w['$/'](x), h['$/'](y)];
+      self.dxy = [(w['$/'](x)).$to_i(), (h['$/'](y)).$to_i()];
       return self.screen = (($a = $scope.Screen) == null ? $opal.cm('Screen') : $a).$new(($a = ($b = self.dxy.$zip([x, y])).$map, $a._p = (TMP_1 = function(i, j){var self = TMP_1._s || this;if (i == null) i = nil;if (j == null) j = nil;
       return i['$*'](j)}, TMP_1._s = self, TMP_1), $a).call($b));
     };

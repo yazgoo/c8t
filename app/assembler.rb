@@ -8,7 +8,7 @@ class Assembler
         @instructions = {
             /CLS/ => "00E0",
             /RET/ => "00EE",
-            /SYS (\w+)/ => "0%03x",
+            #/SYS (\w+)/ => "0%03x",
             /JP (\w+)/ => "1%03x",
             /CALL (\w+)/ => "2%03x",
             /SE V(\d+), (\d+)/ => "3%1x%02x",
@@ -48,8 +48,7 @@ class Assembler
 #        end]
         @reverse_instructions = Hash[@instructions.to_a.collect(&:reverse)].collect do |k, v|
             [ k.gsub("%1x", "(.)").gsub("%02x", "(..)")
-              .gsub("%03x", "(...)").gsub('[', ".")
-              .gsub(']', "."), v ]
+              .gsub("%03x", "(...)"), v ]
         end
         @reverse_instructions = Hash[@reverse_instructions]
     end

@@ -34,17 +34,18 @@ for(var i = 0; i < 4; i++)
         game = pack[select]
         if(game == undefined) return;
         if(emulator != null) emulator.pause
-        text = Opal.Runner.$new().$disassemble(game['content'])
+        // Opal.Runner.$new().$disassemble()
+        text = game['content']
         document.getElementById('editor').value = text
         var description = game['description'];
         if(description == null) description = "";
         description.replace("\n", "<br/>")
         document.getElementById('description').innerHTML = 
-        "<b>" +game['title'] + "</b><br/>"
-        + "<b>Author</b> " +game['author'] + "<br/>"
-        + "<b>Date</b> " +game['date'] + "<br/>"
-        + "<b>Description</b><br/>" + description + ""
-        emulator = Opal.Runner.$new().$run(text);
+        "<b>" +game['title'] + "</b>, "
+        + "by " +game['author'] + " "
+        + "in " +game['date'] + "<hr/>"
+        + description + ""
+        emulator = Opal.Runner.$new().$run2(text);
     }
     </script>
 </fieldset>
@@ -71,15 +72,20 @@ for(k in pack)
     <input type="button" value="source" onclick="launch()"/>
     <input type="button" value=" xxd -p" onclick="launch2()"/>
 </fieldset>
-    <br/>
+<fieldset>
+    <legend>Description</legend>
     <div id="description"></div>
+</fieldset>
 </div>
     <div id="screen_container">
         <canvas id="screen" width="800" height="600"
             style="background-color: black;"></canvas>
     </div>
     <div id="editor_container">
-        <input type="button" value="clear" onclick="document.getElementById('editor').value=''"/><br/>
+        <input type="button" value="clear"
+        onclick="document.getElementById('editor').value=''"/>
+        <input type="button" value="disassemble"
+        onclick="document.getElementById('editor').value=Opal.Runner.$new().$disassemble(document.getElementById('editor').value)"/><br/>
     <textarea id="editor">
 LD v0, 0
 LD v1, 0
