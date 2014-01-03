@@ -17,7 +17,7 @@ class Window < Hash
     end
     def write xy, c
         u = [0, 1].map { |a| xy.zip(@dxy).map{|i,j| (i + a)*j } }
-        @screen.draw_box_s(u[0], u[1], [c * 0xff, c * 0xff, c * 0xff]).update
+        @screen.draw_box_s(u[0], u[1], [c * 0xff] * 3).update
     end
     def beep() end
     attr_accessor :eq, :block, :on_unblock
@@ -109,26 +109,26 @@ class Emulator
 	def draw
 		@v[0xf] = 0
         f = @i & 0xf
-        f00 = (@i & 0xf00) >> (2 * 4)
+        f00 = (@i & 0xf00) >> 8
         f0 = (@i & 0xf0) >> 4
-        #p @I
-        #p @mem[@I] 
-        #exit
         @mem[@I..(@I+f-1)].each_with_index do |line, dy|
 			8.times do |dx|
 				xy = [(@v[f00] + dx) % @width, (@v[f0] + dy) % @height]
 				(@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])
+                puts "(#{xy.join(",")}) (#{@video[xy].join(",")})" if self.log
 				@out.write xy, @video[xy][1]
 				@v[0xf] = 1 if @video[xy].delete_at(0) == 1 and @video[xy][0] == 0
 			end
 		end
 	end
-#	def method_missing n, *args, &block
-#		if (s = n.to_s)[0] == "f" then (@i & s.to_i(16)) >> (s.scan("0").size * 4)
-#		else super end
-#	end
 	def run_instruction i
-        printf "run pc=%d; i=%04x; v=[%s]; I=%d\n", @pc, @i, @v.join(", "), @I if self.log
+        if self.log
+            @assembler ||= Assembler.new
+            ins = sprintf "%04x", i
+            dis = @assembler.parse_instruction_simple(ins)
+            dis += " " * (20 - dis.size)
+            printf "run pc=%04d; i=%s; %s; v=[%s]; I=%d\n", @pc, ins, dis, @v.join(", "), @I
+        end
         f000 = (@i & 0xf000) >> (3 * 4)
         f00 = (@i & 0xf00) >> (2 * 4)
         f0 = (@i & 0xf0) >> 4
@@ -144,24 +144,23 @@ class Emulator
 			when 0 then @v[f00] = @v[f0]
             when 1 then @v[f00] = @v[f00] | @v[f0]
             when 2 then @v[f00] = @v[f00] & @v[f0]
-            when 3 then @v[f00] = @v[f00] ^ @v[f0] # when 1,2,3 then @v[f00] = @v[f00].send ['|','&','^'][f-1], @v[f0]
-			when 4 then a = (@v[f0]+@v[f00]);@v[15] = a != (@v[f00]=(a%256))? 1 : 0
-			when 5 then @v[0xf] = @v[f00] > @v[f0] ? 1 : 0; @v[f00] = @v[f00] - @v[f0]; #puts "v#{f00} -= #{@v[f0]} => #{@v[f00]}"
+            when 3 then @v[f00] = @v[f00] ^ @v[f0]
+			when 4 then a = (@v[f0]+@v[f00]);@v[15] = (a != (@v[f00]=(a%256))? 1 : 0)
+			when 5 then @v[0xf] = @v[f00] > @v[f0] ? 1 : 0; @v[f00] = @v[f00] - @v[f0];
 			when 6 then @v[0xf] = (@v[f00] & 1)
 			when 0xe then @v[0xf] = ((@v[f00] & 0xe000) >> 15)
 			end
 		when 1,2 then
-            if(f000 == 2)
-                @stack.push(@pc)
-            end
+            @stack.push(@pc) if(f000 == 2)
             @pc = fff
             return false
         when 3,5 then 
             @pc += 2 if @v[f00] == ([3,4].include?(f000)? ff : @v[f0])
-        when 5,9 then @pc += 2 if @v[f00] != ([3,4].include?(f000)? ff : @v[f0]) #when 3,4,5,9 then @pc += 2 if Integer.new(@v[f00]).send ([3,5].include?(f000)?'=':'!')+'=', [3,4].include?(f000)? ff : @v[f0]
-		when 6,7 then if f000 == 6 then @v[f00]=ff else @v[f00] += ff end
+        when 4,9 then @pc += 2 if @v[f00] != ([3,4].include?(f000)? ff : @v[f0])
+		when 6 then @v[f00] = ff
+        when 7 then @v[f00] += ff
 		when 0xb then @pc = fff + @v[0]; return false
-		when 0xc then @v[f00] = rand(255) & ff
+		when 0xc then @v[f00] = rand(256) & ff
 		when 0xa then @I = fff
 		when 0xd then draw
 		when 0xe then key_pressed(ff == 0x9e) if [0xa1,0x9e].include? ff
@@ -173,7 +172,6 @@ class Emulator
                 Proc.new { |e| @v[f00] = e; @ready = true })
             when 21 then @ST = @v[f00]
             when 24 then @DT = @v[f00]
-			#when 21,24 then instance_variable_set "@#{ff==24?'S':'D'}T", @v[f00]
 			when 0x29 then @I = @v[f00] * 5
 			when 0x07 then @v[f00] = @DT
 			when 0x33 then sprintf("%03d",@v[f00]).split("").each_with_index { |v,x| @mem[@I+x] = v }

@@ -51,7 +51,9 @@ for(var i = 0; i < 4; i++)
 </fieldset>
 <fieldset>
         <legend>Control</legend>
-    pause<input type="checkbox" id="pause"/>
+    <input type="button" id="pause" value="||"
+    onclick="if(!this.checked) { this.value = '&gt;'; this.checked = true}
+    else { this.value = '||';this.checked = false }"/>
     <input type="button" id="step" value="step"
     onclick="if(emulator != null) emulator.step = true"/>
     log<input type="checkbox" id="log"/>
@@ -70,7 +72,7 @@ for(k in pack)
     </select>
     <br/>
     <input type="button" value="source" onclick="launch()"/>
-    <input type="button" value="xxd -p" onclick="launch2()"/>
+    <input type="button" value="hexa" onclick="launch2()"/>
 </fieldset>
 <fieldset>
     <legend>Description</legend>
@@ -82,10 +84,24 @@ for(k in pack)
             style="background-color: black;"></canvas>
     </div>
     <div id="editor_container">
+        <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io" target="_blank">
+            <img src="app/flattr-badge-large.png" border="0"/>
+        </a>
+        <a class="btn" href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io">
+            <i></i>
+        </a>
+<br/>
         <input type="button" value="clear"
         onclick="document.getElementById('editor').value=''"/>
-        <input type="button" value="disassemble"
-        onclick="document.getElementById('editor').value=Opal.Runner.$new().$disassemble(document.getElementById('editor').value)"/><br/>
+        <input type="button" value="dis"
+        onclick="document.getElementById('editor').value=
+        Opal.Runner.$new().$disassemble(
+        document.getElementById('editor').value)"/>
+        <input type="button" value="asm"
+        onclick="document.getElementById('editor').value=
+        Opal.Runner.$new().$assemble(
+        document.getElementById('editor').value)"/>
+        <br/>
     <textarea id="editor">
 LD v0, 0
 LD v1, 0

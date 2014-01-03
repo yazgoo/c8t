@@ -76,17 +76,19 @@ class Assembler
         end
         @text.join("\n")
     end
-    def parse_instruction i
+    def parse_instruction_simple i
         i = i.upcase
         @reverse_instructions.keys.each do |re|
             if !!(m = i.match(Regexp.new(re)))
                 ins = @reverse_instructions[re].to_s
                 ins = ins[7..-2]if ins.start_with? "("
-                @text << sprintf(ins.to_s.gsub('(\\d+)', '%d').gsub('(\\w+)', '%d'), *(m.to_a[1..-1].map{|x| x.to_i(16)}))
-                return
+                return sprintf(ins.to_s.gsub('(\\d+)', '%d').gsub('(\\w+)', '%d'), *(m.to_a[1..-1].map{|x| x.to_i(16)}))
             end
         end
-        @text << sprintf(".data %d", i.to_i(16))
+        sprintf(".data %d", i.to_i(16))
+    end
+    def parse_instruction i
+        @text << parse_instruction_simple(i)
     end
     def output where = nil
         assemble
