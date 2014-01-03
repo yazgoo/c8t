@@ -73,14 +73,16 @@ class Emulator
         @pause = false
         @step = false
         @log = false
+        @iterations = 1
 	end
     attr_accessor :ready, :pause, :step, :log
     def run_multiple b = self
         `$opal.b = b` if ENV.size == 0
-        b.run if b.ready and (not b.pause or (b.pause and b.step))
+        @iterations.times { b.run } if b.ready and (not b.pause or (b.pause and b.step))
         b.step = false
         if ENV.size == 0
             b.pause = `document.getElementById('pause').checked`
+            #b.iterations = `document.getElementById('iterations').value`.to_i
             b.log = `document.getElementById('log').checked`
             `setTimeout(function() {b.$run_multiple($opal.b)}, 10)`
         else

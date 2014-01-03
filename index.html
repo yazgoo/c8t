@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="app.css"/>
-    <script src="/build.js"></script>
+    <script src="build.js"></script>
     <title>c8t</title>
   </head>
   <body>
@@ -57,6 +57,8 @@ for(var i = 0; i < 4; i++)
     <input type="button" id="step" value="step"
     onclick="if(emulator != null) emulator.step = true"/>
     log<input type="checkbox" id="log"/>
+    <br/><!--<input id="iterations"
+    type="range" value="10" min="1" max="100"/>-->
 </fieldset>
     <fieldset>
         <legend>Launch from</legend>
@@ -84,10 +86,12 @@ for(k in pack)
             style="background-color: black;"></canvas>
     </div>
     <div id="editor_container">
-        <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io" target="_blank">
-            <img src="app/flattr-badge-large.png" border="0"/>
-        </a>
-        <a class="btn" href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io">
+        <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
+            <img src="app/flattr-badge-large.png" border="0"/></a>
+        <a href="//github.com/yazgoo/c8t"><img id="github_ico"
+            title="view github repo"
+            src="app/github.ico" border="0"/></a>
+        <a class="btn" href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io%2Fc8t" title="reference on twitter">
             <i></i>
         </a>
 <br/>
@@ -126,6 +130,15 @@ add_5:
     SE v2, 0
     JP add_5
     RET</textarea>
+    <br/>
+    <a href="//www.chip8.com" title="more details on chip8">
+        <img height="18" border="0"
+        src="//www.chip8.com/images/title.png"></a>
+    <a href="//devernay.free.fr/hacks/chip8/C8TECH10.HTM"
+        title="chip8 documentation">
+        <img height="18" border="0" src="//devernay.free.fr/favicon.ico"/></a>
+    <a href="//opalrb.org" title="built with opalrb">
+        <img src="//opalrb.org/favicon.ico"/></a>
 </div>
   </body>
 </html>
