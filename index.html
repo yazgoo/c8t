@@ -38,20 +38,18 @@ for(var i = 0; i < 4; i++)
 }
     emulator = null
     function launch() {
-        console.log("hexa");
         if(emulator != null) emulator.pause
         emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
     }
     function launch2() {
-        console.log("text");
         if(emulator != null) emulator.pause
         emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
     }
     function launch_hexa_or_source()
     {
         if(document.getElementById('editor').value.indexOf(" ")
-                == -1) launch();
-        else launch2();
+                == -1) launch2();
+        else launch();
     }
     function launch3(select) {
         game = pack[select]
@@ -156,14 +154,6 @@ add_5:
     JP add_5
     RET</textarea>
     <br/>
-    <a href="//www.chip8.com" title="more details on chip8">
-        <img height="18" border="0"
-        src="//www.chip8.com/images/title.png"></a>
-    <a href="//devernay.free.fr/hacks/chip8/C8TECH10.HTM"
-        title="chip8 documentation">
-        <img height="18" border="0" src="//devernay.free.fr/favicon.ico"/></a>
-    <a href="//opalrb.org" title="built with opalrb">
-        <img src="//opalrb.org/favicon.ico"/></a>
 </div>
   </body>
 </html>
