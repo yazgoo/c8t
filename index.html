@@ -85,14 +85,17 @@ for(var i = 0; i < 4; i++)
         <canvas id="screen"></canvas>
     </div>
     <div id="control">
-        <i class="control_button fa fa-pause fa-2x"
+        <i class="control_button fa fa-play fa-2x"
             id="pause"
             onclick="if(this.getAttribute('class').indexOf('play') == -1) {
             this.setAttribute('class', 'control_button fa fa-2x fa-play');
             }
             else {
+            if(emulator == null) launch_hexa_or_source();
             this.setAttribute('class', 'control_button fa fa-2x fa-pause');
             }"/></i>
+        <i class="control_button fa fa-refresh fa-2x" title="run"
+            onclick="launch_hexa_or_source()"></i>
     <i id="step" value="step" class="control_button fa fa-step-forward fa-2x"
         onclick="if(emulator != null) emulator.step = true"></i>
     <i class="control_button fa fa-expand fa-2x"
@@ -126,8 +129,6 @@ for(var i = 0; i < 4; i++)
         onclick="document.getElementById('editor').value=
         Opal.Runner.$new().$assemble(
         document.getElementById('editor').value)"/>
-        <i class="edit_button fa fa-play fa-2x" title="run"
-            onclick="launch_hexa_or_source()"></i>
         <br/>
     <textarea id="editor">
 LD v0, 0
