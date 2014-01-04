@@ -3,11 +3,18 @@ input[type=button] {
     background-color: white;
     color: black;
 }
+input[type=text] {
+    border: 0;
+    font-size: 12px;
+    position: relative;
+    left: -15px;
+    top: -5px;
+}
 input[type=range] {
     border: no;
     background-color: white;
     color: black;
-    width: 100px;
+    width: 70px;
 }
 body {
     background-color: black;
@@ -50,7 +57,7 @@ body {
 #description {
     overflow: auto;
     width: 140px;
-    height: 240px;
+    height: 220px;
 }
 .btn {
     color: #333333;

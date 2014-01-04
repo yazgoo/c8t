@@ -57,8 +57,11 @@ for(var i = 0; i < 4; i++)
     <input type="button" id="step" value="step"
     onclick="if(emulator != null) emulator.step = true"/>
     log<input type="checkbox" id="log"/>
-    <br/><!--<input id="iterations"
-    type="range" value="10" min="1" max="100"/>-->
+    <br/><input title="iterations per run" id="iterations"
+    type="range" value="10" min="1" max="100"
+    onchange="document.getElementById('iterations_text').value = this.value"/>
+    <input type="text" id="iterations_text" value="10" size="3"
+    readonly="true"/>
 </fieldset>
     <fieldset>
         <legend>Launch from</legend>
