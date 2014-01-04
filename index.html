@@ -68,6 +68,15 @@ for(var i = 0; i < 4; i++)
         + description + ""
         emulator = Opal.Runner.$new().$run2(text);
     }
+function goFullScreen(){
+    var canvas = document.getElementById("screen");
+    if(canvas.requestFullScreen)
+        canvas.requestFullScreen();
+    else if(canvas.webkitRequestFullScreen)
+        canvas.webkitRequestFullScreen();
+    else if(canvas.mozRequestFullScreen)
+        canvas.mozRequestFullScreen();
+}
     </script>
     <br/>
         <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
@@ -99,12 +108,7 @@ for(var i = 0; i < 4; i++)
     <i id="step" value="step" class="control_button fa fa-step-forward fa-2x"
         onclick="if(emulator != null) emulator.step = true"></i>
     <i class="control_button fa fa-expand fa-2x"
-        onclick="
-        context = document.getElementById('screen').getContext('2d');
-        console.log(context);
-        context.width = window.innerWidth;
-        context.height = window.innerHeight;
-        "></i>
+        onclick="goFullScreen();"></i>
     <input title="iterations per run" id="iterations"
     type="range" value="10" min="1" max="100"
     onchange="document.getElementById('iterations_text').value = this.value"/>
