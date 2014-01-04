@@ -16,7 +16,6 @@ class Window < Hash
             w = `document.getElementById('screen').width`
             h = `document.getElementById('screen').height`
         end
-        p w, h
         @dxy = [(w/x), (h/y)]
         @screen = Screen.new (@dxy).zip([x, y]).map{|i,j| i*j }
     end
@@ -86,7 +85,8 @@ class Emulator
         @iterations.times { b.run if b.ready and (not b.pause or (b.pause and b.step)) }
         b.step = false
         if ENV.size == 0
-            b.pause = `document.getElementById('pause').checked`
+            b.pause = `document.getElementById('pause').getAttribute('class').indexOf('play') != -1`
+            p b.pause
             b.iterations = `document.getElementById('iterations').value`.to_i
             b.log = `document.getElementById('log').checked`
             `setTimeout(function() {b.$run_multiple($opal.b)}, 10)`

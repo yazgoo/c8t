@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet"
+    href="app/font-awesome-4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="app.css"/>
     <script src="build.js"></script>
     <title>c8t</title>
@@ -8,64 +10,8 @@
   <body>
     <script src="pack.js"></script>
 <div id="keys_container">
-    <fieldset><legend>Keyboard</legend>
-    <script>
-window.key = null
-for(var i = 0; i < 4; i++)
-{
-    for(var j = 0; j < 4; j++)
-    {
-        s = (4 * i + j).toString(16);
-    document.write('<input id="key" type="button" value="' + s
-            + '" onclick="window.key=0x' + s + '"/>')
-    }
-        document.write('<br/>')
-}
-    emulator = null
-    function launch() {
-        if(emulator != null) emulator.pause
-        emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
-    }
-    function launch2() {
-        if(emulator != null) emulator.pause
-        emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
-    }
-    function launch3(select) {
-        game = pack[select]
-        if(game == undefined) return;
-        if(emulator != null) emulator.pause
-        // Opal.Runner.$new().$disassemble()
-        text = game['content']
-        document.getElementById('editor').value = text
-        var description = game['description'];
-        if(description == null) description = "";
-        description.replace("\n", "<br/>")
-        document.getElementById('description').innerHTML = 
-        "<b>" +game['title'] + "</b>, "
-        + "by " +game['author'] + " "
-        + "in " +game['date'] + "<hr/>"
-        + description + ""
-        emulator = Opal.Runner.$new().$run2(text);
-    }
-    </script>
-</fieldset>
-<fieldset>
-        <legend>Control</legend>
-    <input type="button" id="pause" value="||"
-    onclick="if(!this.checked) { this.value = '&gt;'; this.checked = true}
-    else { this.value = '||';this.checked = false }"/>
-    <input type="button" id="step" value="step"
-    onclick="if(emulator != null) emulator.step = true"/>
-    log<input type="checkbox" id="log"/>
-    <br/><input title="iterations per run" id="iterations"
-    type="range" value="10" min="1" max="100"
-    onchange="document.getElementById('iterations_text').value = this.value"/>
-    <input type="text" id="iterations_text" value="10" size="3"
-    readonly="true"/>
-</fieldset>
-    <fieldset>
-        <legend>Launch from</legend>
-    <select onchange="launch3(this.value)">
+    <select onchange="launch3(this.value)"
+        hidefocus="hidefocus">
         <option>program</option>
     <script>
 for(k in pack)
@@ -76,37 +22,114 @@ for(k in pack)
     </script>
     </select>
     <br/>
-    <input type="button" value="source" onclick="launch()"/>
-    <input type="button" value="hexa" onclick="launch2()"/>
-</fieldset>
-<fieldset>
-    <legend>Description</legend>
-    <div id="description"></div>
-</fieldset>
-</div>
-    <div id="screen_container">
-        <canvas id="screen"></canvas>
-    </div>
-    <div id="editor_container">
+    <br/>
+    <script>
+window.key = null
+for(var i = 0; i < 4; i++)
+{
+    for(var j = 0; j < 4; j++)
+    {
+        s = (4 * i + j).toString(16);
+        document.write('<input id="key" class="key '
+                + "key_" + s + '" type="button" value="'
+                + s + '" onclick="window.key=0x' + s + '"/>')
+    }
+        document.write('<br/>')
+}
+    emulator = null
+    function launch() {
+        console.log("hexa");
+        if(emulator != null) emulator.pause
+        emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
+    }
+    function launch2() {
+        console.log("text");
+        if(emulator != null) emulator.pause
+        emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
+    }
+    function launch_hexa_or_source()
+    {
+        if(document.getElementById('editor').value.indexOf(" ")
+                == -1) launch();
+        else launch2();
+    }
+    function launch3(select) {
+        game = pack[select]
+        if(game == undefined) return;
+        if(emulator != null) emulator.pause
+        // Opal.Runner.$new().$disassemble()
+        text = game['content']
+        document.getElementById('editor').value = text
+        var description = game['description'];
+        if(description == null) description = "";
+        description = description.replace(/\n/g, "<br/>")
+        document.getElementById('description').innerHTML = 
+        "<b>" +game['title'] + "</b>, "
+        + "by " +game['author'] + " "
+        + "in " +game['date'] + "<hr/>"
+        + description + ""
+        emulator = Opal.Runner.$new().$run2(text);
+    }
+    </script>
+    <br/>
         <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
-            <img src="app/flattr-badge-large.png" border="0"/></a>
-        <a href="//github.com/yazgoo/c8t"><img id="github_ico"
-            title="view github repo"
-            src="app/github.ico" border="0"/></a>
+            <div class="flattr_button"></div></a>
+        <a href="//github.com/yazgoo/c8t">
+            <i title="view github repo"
+                class="fa fa-github" id="github_ico"></i>
+        </a>
         <a class="btn" href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io%2Fc8t" title="reference on twitter">
             <i></i>
         </a>
-<br/>
-        <input type="button" value="clear"
-        onclick="document.getElementById('editor').value=''"/>
-        <input type="button" value="dis"
+</div>
+<div>
+    <div id="screen_container">
+        <canvas id="screen"></canvas>
+    </div>
+    <div id="control">
+        <i class="control_button fa fa-pause fa-2x"
+            id="pause"
+            onclick="if(this.getAttribute('class').indexOf('play') == -1) {
+            this.setAttribute('class', 'control_button fa fa-2x fa-play');
+            }
+            else {
+            this.setAttribute('class', 'control_button fa fa-2x fa-pause');
+            }"/></i>
+    <i id="step" value="step" class="control_button fa fa-step-forward fa-2x"
+        onclick="if(emulator != null) emulator.step = true"></i>
+    <i class="control_button fa fa-expand fa-2x"
+        onclick="
+        context = document.getElementById('screen').getContext('2d');
+        console.log(context);
+        context.width = window.innerWidth;
+        context.height = window.innerHeight;
+        "></i>
+    <input title="iterations per run" id="iterations"
+    type="range" value="10" min="1" max="100"
+    onchange="document.getElementById('iterations_text').value = this.value"/>
+    <input type="text" id="iterations_text" value="10" size="3"
+    readonly="true"/>
+    <i class="control_button fa fa-list fa-2x" title="log"></i>
+    <input type="checkbox" id="log"/>
+</div>
+    <div id="description">
+    </div>
+</div>
+    <div id="editor_container">
+        <i class="edit_button fa fa-eraser fa-2x" title="clear"
+        onclick="document.getElementById('editor').value=''"></i>
+        <input type="button" value="0x&gt;" title="disassemble"
+        class="square_button"
         onclick="document.getElementById('editor').value=
         Opal.Runner.$new().$disassemble(
         document.getElementById('editor').value)"/>
-        <input type="button" value="asm"
+        <input type="button" value="&gt;0x" class="square_button"
+        title="assemble"
         onclick="document.getElementById('editor').value=
         Opal.Runner.$new().$assemble(
         document.getElementById('editor').value)"/>
+        <i class="edit_button fa fa-play fa-2x" title="run"
+            onclick="launch_hexa_or_source()"></i>
         <br/>
     <textarea id="editor">
 LD v0, 0
