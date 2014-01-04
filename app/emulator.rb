@@ -16,7 +16,8 @@ class Window < Hash
             w = `document.getElementById('screen').width`
             h = `document.getElementById('screen').height`
         end
-        @dxy = [(w/x).to_i, (h/y).to_i]
+        p w, h
+        @dxy = [(w/x), (h/y)]
         @screen = Screen.new (@dxy).zip([x, y]).map{|i,j| i*j }
     end
     def write xy, c
