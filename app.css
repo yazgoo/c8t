@@ -36,10 +36,22 @@ body {
 }
 #screen_container {
     float: left;
+    position: relative;
     border: 1px solid white;
-    border-radius: 0px;
-    padding: 5px;
     background-color: transparent;
+    width: 60%;
+}
+#screen_container:before {
+    content: "";
+    display: block;
+    padding-top: 50%;
+}
+#screen {
+    background-color: red;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
 #editor_container {
     float: left;

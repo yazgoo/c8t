@@ -12,6 +12,10 @@ class Window < Hash
     require 'rubygame'
     include Rubygame
     def initialize x, y, w = 800, h = 600
+        if ENV.size == 0
+            w = `document.getElementById('screen').width`
+            h = `document.getElementById('screen').height`
+        end
         @dxy = [(w/x).to_i, (h/y).to_i]
         @screen = Screen.new (@dxy).zip([x, y]).map{|i,j| i*j }
     end
