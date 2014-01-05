@@ -77,6 +77,17 @@ function goFullScreen(){
     else if(canvas.mozRequestFullScreen)
         canvas.mozRequestFullScreen();
 }
+function check_uncheck(a, on, off)
+{
+    var prefix = 'control_button fa fa-2x fa-';
+    if(a.getAttribute('class').indexOf(on) == -1) {
+        a.setAttribute('class', prefix + on);
+    }
+    else {
+        if(emulator == null) launch_hexa_or_source();
+        a.setAttribute('class', prefix + off);
+    }
+}
     </script>
     <br/>
         <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
@@ -96,26 +107,26 @@ function goFullScreen(){
     <div id="control">
         <i class="control_button fa fa-play fa-2x"
             id="pause"
-            onclick="if(this.getAttribute('class').indexOf('play') == -1) {
-            this.setAttribute('class', 'control_button fa fa-2x fa-play');
-            }
-            else {
-            if(emulator == null) launch_hexa_or_source();
-            this.setAttribute('class', 'control_button fa fa-2x fa-pause');
-            }"/></i>
+            title="play/pause"
+            onclick="check_uncheck(this, 'play', 'pause');"/></i>
         <i class="control_button fa fa-refresh fa-2x" title="run"
             onclick="launch_hexa_or_source()"></i>
-    <i id="step" value="step" class="control_button fa fa-step-forward fa-2x"
+    <i id="step" value="step"
+        title="step"
+        class="control_button fa fa-step-forward fa-2x"
         onclick="if(emulator != null) emulator.step = true"></i>
     <i class="control_button fa fa-expand fa-2x"
+        title="fullscreen"
         onclick="goFullScreen();"></i>
+    <i class="control_button fa fa-file-text-o fa-2x"
+        title="log" id="log"
+        onclick="check_uncheck(this, 'file-text-o', 'file-o');"></i>
     <input title="iterations per run" id="iterations"
     type="range" value="10" min="1" max="100"
     onchange="document.getElementById('iterations_text').value = this.value"/>
     <input type="text" id="iterations_text" value="10" size="3"
     readonly="true"/>
-    <i class="control_button fa fa-list fa-2x" title="log"></i>
-    <input type="checkbox" id="log"/>
+    </div>
 </div>
     <div id="description">
     </div>

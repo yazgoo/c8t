@@ -87,7 +87,7 @@ class Emulator
         if ENV.size == 0
             b.pause = `document.getElementById('pause').getAttribute('class').indexOf('play') != -1`
             b.iterations = `document.getElementById('iterations').value`.to_i
-            b.log = `document.getElementById('log').checked`
+            b.log = `document.getElementById('log').getAttribute('class').indexOf('file-o') != -1`
             `setTimeout(function() {b.$run_multiple($opal.b)}, 10)`
         else
             sleep 0.01
