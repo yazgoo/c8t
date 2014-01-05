@@ -68,6 +68,24 @@ for(var i = 0; i < 4; i++)
         + description + ""
         emulator = Opal.Runner.$new().$run2(text);
     }
+    function writeHelp() {
+        document.getElementById('description').innerHTML = 
+            "This is a chip8 emulator.<br/>"
+            + "On the right, you have an editor with the current program.<br/>"
+            + "You can either erase it or (dis)assemble it.<br/>"
+            + "The assembly is in hexadecimal.<br/>"
+            + "You can start playing the current program with the play button.<br/>"
+            + "Once started, the default program prints the current key pressed.<br/>"
+            + "Keys, from 0 to f, are available on the left.<br/>"
+            + "You can pause, reload, fullscreen the current program.<br/>"
+            + "Finaly you can load ROMs via the upper left drop down menu.<br/>"
+            + "The editor allows you to modify/write your own program.<br/>"
+            + "Once your modification is done, just press the reload button.<br/>"
+            + "You can pause the program, enable logging and playing it step by step.<br/>"
+            + "Some usefull links:"
+            + "<ul><li><a href=http://www.chip8.com>chip8.com</a></li>"
+            + "<li><a href=http://devernay.free.fr/hacks/chip8/C8TECH10.HTM>a really good description</a></li></ul>"
+    }
 function goFullScreen(){
     var canvas = document.getElementById("screen");
     if(canvas.requestFullScreen)
@@ -126,6 +144,8 @@ function check_uncheck(a, on, off)
     onchange="document.getElementById('iterations_text').value = this.value"/>
     <input type="text" id="iterations_text" value="10" size="3"
     readonly="true"/>
+    <i class="edit_button fa fa-question fa-2x"
+        title="help" onclick="writeHelp()"></i>
     </div>
 </div>
     <div id="description">
