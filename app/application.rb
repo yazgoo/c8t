@@ -1,4 +1,5 @@
 require "opal"
+require "opal-jquery"
 require "assembler"
 require "emulator"
 class Runner
@@ -19,5 +20,21 @@ class Runner
         e = Emulator.new(assembly, "Window");
         e.run_multiple
         e
+    end
+    def minify address
+        #`jQuery.support.cors = true`
+        opts = {
+#            :crossDomain => true,
+#            :headers => {
+#                :Location => true,
+#            },
+#            "Access-Control-Request-Headers" => "Location",
+            :payload => 'url=http://github.com/&code=json'}
+        HTTP.new("http://git.io", "POST", opts).callback do |a, b, c|
+            puts "callback"
+        end.errback do |a, b, c|
+            puts "errback 0"
+            puts "errback 4"
+        end.send!
     end
 end

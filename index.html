@@ -4,6 +4,7 @@
     <link rel="stylesheet"
     href="app/font-awesome-4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="app.css"/>
+    <script src="app/jquery-1.7.2.min.js"></script>
     <script src="build.js"></script>
     <title>c8t</title>
   </head>
@@ -24,6 +25,20 @@ for(k in pack)
     <br/>
     <br/>
     <script>
+function getParameterProgram()
+{
+    p = location.search.split('p=')[1];
+    if(p == undefined) return false;
+    return p;
+}
+function shareProgramLink()
+{
+    var address = location.href;
+    if(getParameterProgram()) address = address.split("?")[0];
+    address += "?p=" + document.getElementById('editor').value;
+    address = "http://www.github.com";
+    emulator = Opal.Runner.$new().$minify(address);
+}
 window.key = null
 for(var i = 0; i < 4; i++)
 {
@@ -139,6 +154,9 @@ function check_uncheck(a, on, off)
     <i class="control_button fa fa-file-text-o fa-2x"
         title="log" id="log"
         onclick="check_uncheck(this, 'file-text-o', 'file-o');"></i>
+    <i class="control_button fa fa-link fa-2x"
+        title="share current program" id="share link"
+        onclick="shareProgramLink()"></i>
     <input title="iterations per run" id="iterations"
     type="range" value="10" min="1" max="100"
     onchange="document.getElementById('iterations_text').value = this.value"/>
@@ -191,5 +209,10 @@ add_5:
     RET</textarea>
     <br/>
 </div>
+<script>
+
+if((p = getParameterProgram()))
+    document.getElementById("editor").value = p;
+</script>
   </body>
 </html>
