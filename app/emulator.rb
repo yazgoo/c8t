@@ -91,12 +91,14 @@ class Emulator
     attr_accessor :ready, :pause, :step, :log, :iterations
     def run_multiple b = self
         `$opal.b = b` if ENV.size == 0
-        @iterations.times { b.run if b.ready and (not b.pause or (b.pause and b.step)) }
-        b.step = false
         if ENV.size == 0
             b.pause = `document.getElementById('pause').getAttribute('class').indexOf('play') != -1`
             b.iterations = `document.getElementById('iterations').value`.to_i
             b.log = `document.getElementById('log').getAttribute('class').indexOf('file-o') != -1`
+        end
+        @iterations.times { b.run if b.ready and (not b.pause or (b.pause and b.step)) }
+        b.step = false
+        if ENV.size == 0
             `setTimeout(function() {b.$run_multiple($opal.b)}, 10)`
         else
             sleep 0.01
@@ -136,7 +138,7 @@ class Emulator
 		end
 	end
 	def run_instruction i
-        0xf.times { |i| @v[i] = @v[i] % 0xff }
+        0xf.times { |i| @v[i] = @v[i] % 0x100 }
         if self.log
             @assembler ||= Assembler.new
             ins = sprintf "%04x", i

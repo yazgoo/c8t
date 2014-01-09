@@ -40,11 +40,12 @@ function shareProgramLink()
     emulator = Opal.Runner.$new().$minify(address);
 }
 window.key = null
+k = [1, 2, 3, 0xc, 4, 5, 6, 0xd, 7, 8, 9, 0xe, 0xa, 0, 0xb, 0xf]
 for(var i = 0; i < 4; i++)
 {
     for(var j = 0; j < 4; j++)
     {
-        s = (4 * i + j).toString(16);
+        s = k[(4 * i + j)].toString(16);
         document.write('<input id="key" class="key '
                 + "key_" + s + '" type="button" value="'
                 + s + '" onclick="window.key=0x' + s + '"/>')
@@ -213,6 +214,16 @@ add_5:
 
 if((p = getParameterProgram()))
     document.getElementById("editor").value = p;
+
+    $("body").keydown(function(e) {
+            if(e.keyCode == 37) window.key = 4;
+            else if(e.keyCode == 39) window.key = 6;
+            else if(e.keyCode == 38) window.key = 2;
+            else if(e.keyCode == 40) window.key = 8;
+            else if(e.keyCode == 32) window.key = 5;
+            });
+
+
 </script>
   </body>
 </html>

@@ -171,13 +171,13 @@ hr {
 .square_button:hover {
     background-color: grey;
 }
-.key_0 {
+.key_1 {
     border-top-left-radius: 10px;
 }
-.key_3 {
+.key_c {
     border-top-right-radius: 10px;
 }
-.key_c {
+.key_a {
     border-bottom-left-radius: 10px;
 }
 .key_f {
