@@ -133,12 +133,13 @@ class Emulator
 				xy = [(@v[f00] + dx) % @width, (@v[f0] + dy) % @height]
 				(@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])
 				@out.write xy, @video[xy][1]
+                p xy, @video[xy][1] if log
 				@v[0xf] = 1 if @video[xy].delete_at(0) == 1 and @video[xy][0] == 0
 			end
 		end
 	end
 	def run_instruction i
-        0xf.times { |i| @v[i] = @v[i] % 0x100 }
+        0x10.times { |k| @v[k] = @v[k] % 0x100 }
         if self.log
             @assembler ||= Assembler.new
             ins = sprintf "%04x", i
@@ -164,8 +165,8 @@ class Emulator
             when 3 then @v[f00] = @v[f00] ^ @v[f0]
 			when 4 then a = (@v[f0]+@v[f00]);@v[15] = (a != (@v[f00]=(a%256))? 1 : 0)
 			when 5 then @v[0xf] = @v[f00] > @v[f0] ? 1 : 0; @v[f00] = @v[f00] - @v[f0];
-			when 6 then @v[0xf] = (@v[f00] & 1); @v[f00] /= 2
-			when 0xe then @v[0xf] = ((@v[f00] & 0xe000) >> 15); @v[f00] *= 2
+			when 6 then @v[0xf] = (@v[f00] & 1); @v[f00] = @v[f00]/2
+			when 0xe then @v[0xf] = ((@v[f00] & 0xe000) >> 15); @v[f00] = @v[f00] * 2
 			end
 		when 1,2 then
             @stack.push(@pc) if(f000 == 2)

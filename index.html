@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"/>
     <link rel="stylesheet"
     href="app/font-awesome-4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="app.css"/>
@@ -10,21 +13,24 @@
   </head>
   <body>
     <script src="pack.js"></script>
+    <div>
+</div>
 <div id="keys_container">
-    <select onchange="launch3(this.value)"
-        hidefocus="hidefocus">
-        <option>program</option>
     <script>
-for(k in pack)
+function hide_show(g)
 {
-
-        document.write("<option value='"+ k +"'>" + pack[k]['short'] + "</option>");
+$(g).toggle(function()
+        {
+            var screen_width = parseFloat($(g).parent().css('width'));
+            var show = $(g).css('display') != 'none';
+            var f = '#screen_container'
+            var p = parseFloat($(f).css('width'))
+            p /= screen_width;
+            var size = (p + (show?-1:1) * 0.2) * screen_width;
+            $(f).width(size)
+            $('#control').width(size)
+        })
 }
-    </script>
-    </select>
-    <br/>
-    <br/>
-    <script>
 function getParameterProgram()
 {
     p = location.search.split('p=')[1];
@@ -155,16 +161,35 @@ function check_uncheck(a, on, off)
     <i class="control_button fa fa-file-text-o fa-2x"
         title="log" id="log"
         onclick="check_uncheck(this, 'file-text-o', 'file-o');"></i>
+    <i class="control_button fa fa-pencil fa-2x" title="hide/show editor"
+        onclick="hide_show('#editor_container')"></i>
+    <i class="control_button fa fa-keyboard-o fa-2x"
+        title="hide/show keyboard"
+        onclick="hide_show('#keys_container')"></i>
+    <i class="control_button fa fa-file-text-o fa-2x"
+        title="log" id="log"
+        onclick="check_uncheck(this, 'file-text-o', 'file-o');"></i>
     <i class="control_button fa fa-link fa-2x"
         title="share current program" id="share link"
         onclick="shareProgramLink()"></i>
+    <select onchange="launch3(this.value)"
+        hidefocus="hidefocus">
+        <option>program</option>
+    <script>
+for(k in pack)
+{
+
+        document.write("<option value='"+ k +"'>" + pack[k]['short'] + "</option>");
+}
+    </script>
+    </select>
+    <i class="edit_button fa fa-question fa-2x"
+        title="help" onclick="writeHelp()"></i>
     <input title="iterations per run" id="iterations"
     type="range" value="10" min="1" max="100"
     onchange="document.getElementById('iterations_text').value = this.value"/>
     <input type="text" id="iterations_text" value="10" size="3"
     readonly="true"/>
-    <i class="edit_button fa fa-question fa-2x"
-        title="help" onclick="writeHelp()"></i>
     </div>
 </div>
     <div id="description">
