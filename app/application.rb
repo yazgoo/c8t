@@ -22,17 +22,20 @@ class Runner
         e
     end
     def minify address
+        
+        [' ', ',', '/', '?', '=', '\n', '\r', ':'].each do |s|
+            address = address.gsub s, ("%"+ s.ord.to_s(16))
+        end
         opts =  { 
             :format => "json",
-            :payload => "apiKey=R_f857b8e18d6f401f917086b316e9f3de&login=c8tc8t&longUrl=" + address,
+            :payload => "apiKey=R_f857b8e18d6f401f917086b316e9f3de&login=c8tc8t&longUrl=" + 
+            address,
         }
         HTTP.new("http://api.bitly.com/v3/shorten?callback=?", "POST", opts).callback do |response|
             url = `response.body.data.url`
             `alert("url: " + url)`
         end.errback do |a, b, c|
             p a, b, c
-            puts "errback 0"
-            puts "errback 4"
         end.send!
     end
 end
