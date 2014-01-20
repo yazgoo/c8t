@@ -33,7 +33,7 @@ $(g).toggle(function()
 }
 function getParameterProgram()
 {
-    p = location.search.split('p=')[1];
+    p = decodeURIComponent(location.search.split('p=')[1]);
     if(p == undefined) return false;
     return p;
 }
