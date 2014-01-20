@@ -12339,7 +12339,7 @@ if (x == null) x = nil;
 
     def.$initialize = function() {
       var self = this;
-      return self.special = [" ", ",", "/", "?", "=", "\n", "\r", ":"];
+      return self.special = [" ", ",", "/", "?", "=", ":"];
     };
 
     def.$encode = function(address) {

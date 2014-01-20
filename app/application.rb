@@ -22,7 +22,7 @@ class Runner
         e
     end
     def initialize
-        @special = [' ', ',', '/', '?', '=', '\n', '\r', ':']
+        @special = [' ', ',', '/', '?', '=', ':']
     end
     def encode address
         @special.each do |s|
