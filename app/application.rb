@@ -22,17 +22,15 @@ class Runner
         e
     end
     def minify address
-        #`jQuery.support.cors = true`
-        opts = {
-#            :crossDomain => true,
-#            :headers => {
-#                :Location => true,
-#            },
-#            "Access-Control-Request-Headers" => "Location",
-            :payload => 'url=http://github.com/&code=json'}
-        HTTP.new("http://git.io", "POST", opts).callback do |a, b, c|
-            puts "callback"
+        opts =  { 
+            :format => "json",
+            :payload => "apiKey=R_f857b8e18d6f401f917086b316e9f3de&login=c8tc8t&longUrl=" + address,
+        }
+        HTTP.new("http://api.bitly.com/v3/shorten?callback=?", "POST", opts).callback do |response|
+            url = `response.body.data.url`
+            `alert("url: " + url)`
         end.errback do |a, b, c|
+            p a, b, c
             puts "errback 0"
             puts "errback 4"
         end.send!
