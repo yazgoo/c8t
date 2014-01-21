@@ -26,15 +26,15 @@ class Runner
     end
     def encode address
         @special.each do |s|
-            address = address.gsub s, ("%"+ s.ord.to_s(16))
+            address = address.gsub s, (sprintf "%%%02x", s.ord)
         end
-        address.gsub('\u00a', '%a')
+        address
     end
     def decode address
         @special.each do |s|
-            address = address.gsub ("%"+ s.ord.to_s(16)), s
+            address = address.gsub (sprintf "%%%02x", s.ord), s
         end
-        address.gsub('\u00a', '\n')
+        address
     end
     def minify address
         opts =  { 
