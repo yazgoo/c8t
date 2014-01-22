@@ -31,6 +31,7 @@ $(g).toggle(function()
             $('#control').width(size)
         })
 }
+/*
 function getParameterProgram()
 {
     p = location.search.split('p=')[1];
@@ -44,6 +45,7 @@ function shareProgramLink()
     address += "?p=" + Opal.Runner.$new().$encode(document.getElementById('editor').value);
     Opal.Runner.$new().$minify(address);
 }
+*/
 window.key = null
 k = [1, 2, 3, 0xc, 4, 5, 6, 0xd, 7, 8, 9, 0xe, 0xa, 0, 0xb, 0xf]
 for(var i = 0; i < 4; i++)
@@ -174,7 +176,7 @@ function check_uncheck(a, on, off)
         onclick="check_uncheck(this, 'file-text-o', 'file-o');"></i>
     <i class="control_button fa fa-link fa-2x"
         title="share current program" id="share link"
-        onclick="shareProgramLink()"></i>
+        onclick="Opal.Runner.$new().$minify_program()"></i>
     <select onchange="launch3(this.value)"
         hidefocus="hidefocus">
         <option>program</option>
@@ -240,8 +242,9 @@ add_5:
 </div>
 <script>
 
-if((p = getParameterProgram()))
-    document.getElementById("editor").value = p;
+    Opal.Runner.$new().$load_program();
+/*if((p = getParameterProgram()))
+    document.getElementById("editor").value = p;*/
 
     $("body").keydown(function(e) {
             if(e.keyCode == 37) window.key = 4;

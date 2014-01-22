@@ -36,6 +36,20 @@ class Runner
         end
         address
     end
+    def parameter
+        pa = `location.search.split('p=')[1]`
+        return false if `pa == undefined`
+        decode(pa)
+    end
+    def minify_program
+        address = `location.href`
+        address = address.split("?")[0] if parameter
+        address += "?p=" + encode(Element['#editor'].value)
+        minify address
+    end
+    def load_program
+        Element['#editor'].value = parameter if parameter
+    end
     def minify address
         opts =  { 
             :format => "json",
