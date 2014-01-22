@@ -13,7 +13,7 @@ class Runner
         Assembler.new.unparse text
     end
     def assemble text
-        Assembler.new.parse(text).output.map{ |x| sprintf "%02x", x }.join
+        Assembler.new.parse(text).output.map{ |x| sprintf "%02X", x }.join
     end
     def run2 text
         assembly = text.split("\n").join.scan(/../).map{ |s| s.to_i(16) }
@@ -22,17 +22,17 @@ class Runner
         e
     end
     def initialize
-        @special = [' ', ',', '/', '?', '=', '\n', ':']
+        @special = ['%', ' ', ',', '/', '?', '=', '\n', ':']
     end
     def encode address
         @special.each do |s|
-            address = address.gsub s, (sprintf "%%%02x", s.ord)
+            address = address.gsub s, (sprintf "%%%02X", s.ord)
         end
         address
     end
     def decode address
-        @special.each do |s|
-            address = address.gsub (sprintf "%%%02x", s.ord), s
+        @special.reverse.each do |s|
+            address = address.gsub (sprintf "%%%02X", s.ord), s
         end
         address
     end

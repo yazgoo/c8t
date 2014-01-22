@@ -41,7 +41,7 @@ function shareProgramLink()
 {
     var address = location.href;
     if(getParameterProgram()) address = address.split("?")[0];
-    address += "?p=" + document.getElementById('editor').value;
+    address += "?p=" + Opal.Runner.$new().$encode(document.getElementById('editor').value);
     Opal.Runner.$new().$minify(address);
 }
 window.key = null
