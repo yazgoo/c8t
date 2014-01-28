@@ -26,11 +26,17 @@ module Rubygame
     end
     class EventQueue
         def each
-            `if (window.key != undefined) {//blah`
+            #`if (window.key != undefined) {//blah`
+            array = `window.key`
+            k = nil
+            while true
+                k = array.shift
+                break if `k == undefined` or k.nil?
             t = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47, 97, 98, 99, 100, 101, 102]
-            i = t[`window.key`]
+            i = t[k]
             yield KeyDownEvent.new i
-            `window.key = undefined}`
+            end
+            #`window.key = undefined}`
         end
     end
 end

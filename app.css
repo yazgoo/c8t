@@ -9,9 +9,9 @@ select {
     color: black;
     border: 1px solid grey;
     border-radius: 5px;
-    color: #000;
+/*    color: #000;
     color: rgba(0,0,0,0);
-    text-shadow: 0 0 0 #000;
+    text-shadow: 0 0 0 #000; */
 }
 .no-textshadow select {
       color: #000;
@@ -23,6 +23,17 @@ select {
     padding: 2px;
     border: 0;
     color: white;
+    background-color: transparent;
+}
+.big_play_button {
+    cursor: pointer;
+    width: 20px;
+    position: absolute;
+    border: 0;
+    color: white;
+    z-index: 1;
+    top: 43%;
+    left: 43%;
     background-color: transparent;
 }
 .control_button:hover {
@@ -44,6 +55,9 @@ select {
     position: relative;
     left: -35px;
     top: -20px;
+}
+input[type=text] {
+    border: 1px solid black;
 }
 input[type=range] {
     border: no;
@@ -80,7 +94,7 @@ body {
     position: relative;
     border: 1px solid black;
     background-color: black;
-    width: 100%;
+    width: 85%;
 }
 #screen_container:before {
     content: "";
@@ -127,7 +141,7 @@ body {
     border-top: 2px solid grey;
     font-size: 13px;
     float: left;
-    width: 100%;
+    width: 85%;
     overflow: auto;
 }
 hr {

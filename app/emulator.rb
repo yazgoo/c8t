@@ -61,14 +61,6 @@ class Window < Hash
         end
     end
 end
-class Integer
-    def + b
-        (self + b) % 256
-    end
-    def - b
-        (self - b) % 256
-    end
-end
 class Emulator
 	def initialize str, ui
         @width = 64
@@ -130,11 +122,14 @@ class Emulator
         f0 = (@i & 0xf0) >> 4
         @mem[@I..(@I+f-1)].each_with_index do |line, dy|
 			8.times do |dx|
-				xy = [(@v[f00] + dx) % @width, (@v[f0] + dy) % @height]
-				(@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])
-				@out.write xy, @video[xy][1]
-                p xy, @video[xy][1] if log
-				@v[0xf] = 1 if @video[xy].delete_at(0) == 1 and @video[xy][0] == 0
+				xy = [(@v[f00] + dx), (@v[f0] + dy)]
+                # normally, drawing should wrap (modulo)
+                if xy[0] < @width or xy[1] < @height
+                    (@video[xy] ||= [0]).push(((line >> (7 - dx)) & 1) ^ @video[xy][0])
+                    @out.write xy, @video[xy][1]
+                    p xy, @video[xy][1] if log
+                    @v[0xf] = 1 if @video[xy].delete_at(0) == 1 and @video[xy][0] == 0
+                end
 			end
 		end
 	end
