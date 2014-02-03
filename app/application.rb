@@ -10,6 +10,10 @@ module Kernel
         callback = `function(){ #{block.call}; }`
         `setInterval(callback, #{interval})`
     end
+    def after interval, &block
+        callback = `function(){ #{block.call}; }`
+        `setTimeout(callback, #{interval})`
+    end
 end
 class Runner
     def run text
@@ -19,7 +23,7 @@ class Runner
         e
     end
     def keys_push k
-        @@keys << k
+        @@keys << [k, Time.new]
     end
     def disassemble text
         Assembler.new.unparse text
@@ -72,7 +76,7 @@ class Runner
         load_program
         key_to_keypad_key = {37=> 4, 39=> 6, 38=> 2, 40=> 8, 32=> 5}
         Element['body'].on(:keydown) do |e|
-            keys_push << key_to_keypad_key[e.key_code]
+            keys_push key_to_keypad_key[e.key_code]
         end
         Element['#screen'].on(:mousedown) do |e|
             left = `e.$target().offset().left`
@@ -83,6 +87,7 @@ class Runner
             end
         end
         Element['#screen'].on(:mouseup) do |e|
+            e.target.focus()
             clear @click
         end
     end

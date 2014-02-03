@@ -29,12 +29,19 @@ module Rubygame
             #`if (window.key != undefined) {//blah`
             array = `window.key`
             k = nil
-            while true
-                k = array.shift
-                break if `k == undefined` or k.nil?
-            t = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47, 97, 98, 99, 100, 101, 102]
-            i = t[k]
-            yield KeyDownEvent.new i
+            now = Time.new 
+            array.delete_if do |a|
+                if `a != undefined` and not a.nil?
+                    k, time = a
+                    if `k != undefined` or not k.nil?
+                        t = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47, 97, 98, 99, 100, 101, 102]
+                        i = t[k]
+                        yield KeyDownEvent.new i
+                    end
+                    (now - time) > 0.2
+                else
+                    false
+                end
             end
             #`window.key = undefined}`
         end
