@@ -163,6 +163,10 @@ function play_pause()
             onclick="play_pause();"/></i>
         <i class="control_button fa fa-refresh fa-2x" title="run"
             onclick="launch_hexa_or_source()"></i>
+    <i id="sound" value="sound"
+        title="enable/disable sound"
+        class="control_button fa fa-volume-off fa-2x"
+        onclick="check_uncheck(this, 'volume-off', 'volume-up');"></i>
     <i id="step" value="step"
         title="step"
         class="control_button fa fa-step-forward fa-2x"

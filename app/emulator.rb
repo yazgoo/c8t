@@ -105,15 +105,17 @@ class Emulator
         @pause = false
         @step = false
         @log = false
+        @sound = false
         @iterations = 10
 	end
-    attr_accessor :ready, :pause, :step, :log, :iterations
+    attr_accessor :ready, :pause, :step, :log, :iterations, :sound
     def run_multiple b = self
         `$opal.b = b` if ENV.size == 0
         if ENV.size == 0
             b.pause = `document.getElementById('pause').getAttribute('class').indexOf('play') != -1`
             b.iterations = `document.getElementById('iterations').value`.to_i
             b.log = `document.getElementById('log').getAttribute('class').indexOf('file-o') != -1`
+            b.sound = `document.getElementById('sound').getAttribute('class').indexOf('volume-up') != -1`
         end
         @iterations.times { b.run if b.ready and (not b.pause or (b.pause and b.step)) }
         b.step = false
@@ -131,7 +133,7 @@ class Emulator
             @t = Time.now
             @DT -= 1 if @DT > 0
             if (@ST -= 1) > 0
-                @out.beep
+                @out.beep if @sound
             else
                 @ST = 0
             end
