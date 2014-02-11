@@ -60,7 +60,7 @@ input[type=text] {
     border: 1px solid black;
 }
 input[type=range] {
-    border: no;
+    border: 0;
     background-color: transparent;
     color: black;
     width: 70px;

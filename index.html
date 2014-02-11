@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"/>
@@ -12,52 +13,12 @@
     <title>c8t</title>
   </head>
   <body>
-    <script src="pack.js"></script>
-    <div>
-</div>
 <div id="keys_container">
+    <div id="keyboard">
+    </div>
     <script>
-function hide_show(g)
-{
-$(g).toggle(function()
-        {
-            var screen_width = parseFloat($(g).parent().css('width'));
-            var show = $(g).css('display') != 'none';
-            var f = '#screen_container'
-            var p = parseFloat($(f).css('width'))
-            p /= screen_width;
-            var size = (p + (show?-1:1) * 0.2) * screen_width;
-            $(f).width(size)
-            $('#control').width(size)
-        })
-}
-/*
-function getParameterProgram()
-{
-    p = location.search.split('p=')[1];
-    if(p == undefined) return false;
-    return Opal.Runner.$new().$decode(p);
-}
-function shareProgramLink()
-{
-    var address = location.href;
-    if(getParameterProgram()) address = address.split("?")[0];
-    address += "?p=" + Opal.Runner.$new().$encode(document.getElementById('editor').value);
-    Opal.Runner.$new().$minify(address);
-}
-*/
-k = [1, 2, 3, 0xc, 4, 5, 6, 0xd, 7, 8, 9, 0xe, 0xa, 0, 0xb, 0xf]
-for(var i = 0; i < 4; i++)
-{
-    for(var j = 0; j < 4; j++)
-    {
-        s = k[(4 * i + j)].toString(16);
-        document.write('<input id="key" class="key '
-                + "key_" + s + '" type="button" value="'
-                + s + '" onclick="Opal.Runner.$new().$keys_push(0x' + s + ')"/>')
-    }
-        document.write('<br/>')
-}
+window.runner = Opal.Runner.$new();
+window.runner.$fill_keyboard();
     emulator = null
     function launch() {
         if(emulator != null) emulator.pause
@@ -74,10 +35,10 @@ for(var i = 0; i < 4; i++)
         else launch();
     }
     function launch3(select) {
-        game = pack[select]
-        if(game == undefined) return;
+        //if(game == undefined) return;
         if(emulator != null) emulator.pause
         // Opal.Runner.$new().$disassemble()
+        game = JSON.parse(select);
         text = game['content']
         document.getElementById('editor').value = text
         document.getElementById('title').value = game['title']
@@ -93,49 +54,6 @@ for(var i = 0; i < 4; i++)
         + description + ""
         emulator = Opal.Runner.$new().$run2(text);
     }
-    function writeHelp() {
-        document.getElementById('description').innerHTML = 
-            "This is a chip8 emulator.<br/>"
-            + "On the right, you have an editor with the current program.<br/>"
-            + "You can either erase it or (dis)assemble it.<br/>"
-            + "The assembly is in hexadecimal.<br/>"
-            + "You can start playing the current program with the play button.<br/>"
-            + "Once started, the default program prints the current key pressed.<br/>"
-            + "Keys, from 0 to f, are available on the left.<br/>"
-            + "You can pause, reload, fullscreen the current program.<br/>"
-            + "Finaly you can load ROMs via the upper left drop down menu.<br/>"
-            + "The editor allows you to modify/write your own program.<br/>"
-            + "Once your modification is done, just press the reload button.<br/>"
-            + "You can pause the program, enable logging and playing it step by step.<br/>"
-            + "Some usefull links:"
-            + "<ul><li><a href=http://www.chip8.com>chip8.com</a></li>"
-            + "<li><a href=http://devernay.free.fr/hacks/chip8/C8TECH10.HTM>a really good description</a></li></ul>"
-    }
-function goFullScreen(){
-    var canvas = document.getElementById("screen");
-    if(canvas.requestFullScreen)
-        canvas.requestFullScreen();
-    else if(canvas.webkitRequestFullScreen)
-        canvas.webkitRequestFullScreen();
-    else if(canvas.mozRequestFullScreen)
-        canvas.mozRequestFullScreen();
-}
-function check_uncheck(a, on, off)
-{
-    var prefix = 'control_button fa fa-2x fa-';
-    if(a.getAttribute('class').indexOf(on) == -1) {
-        a.setAttribute('class', prefix + on);
-    }
-    else {
-        if(emulator == null) launch_hexa_or_source();
-        a.setAttribute('class', prefix + off);
-    }
-}
-function play_pause()
-{
-    $("#big_play_button").css({'visibility': 'hidden'})
-    check_uncheck(document.getElementById("pause"), 'play', 'pause');
-}
     </script>
     <br/>
         <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
@@ -152,7 +70,7 @@ function play_pause()
     <div id="screen_container">
         <i class="big_play_button fa fa-youtube-play fa-5x"
             id="big_play_button"
-            onclick="play_pause();"></i>
+            onclick="runner.$play_pause();"></i>
         <canvas id="screen">
         </canvas>
     </div>
@@ -160,48 +78,41 @@ function play_pause()
         <i class="control_button fa fa-play fa-2x"
             id="pause"
             title="play/pause"
-            onclick="play_pause();"/></i>
+            onclick="runner.$play_pause();"/></i>
         <i class="control_button fa fa-refresh fa-2x" title="run"
             onclick="launch_hexa_or_source()"></i>
     <i id="sound" value="sound"
         title="enable/disable sound"
         class="control_button fa fa-volume-off fa-2x"
-        onclick="check_uncheck(this, 'volume-off', 'volume-up');"></i>
+        onclick="window.runner.$check_uncheck(this, 'volume-off', 'volume-up');"></i>
     <i id="step" value="step"
         title="step"
         class="control_button fa fa-step-forward fa-2x"
         onclick="if(emulator != null) emulator.step = true"></i>
     <i class="control_button fa fa-expand fa-2x"
         title="fullscreen"
-        onclick="goFullScreen();"></i>
+        onclick="window.runner.$goFullScreen();"></i>
     <i class="control_button fa fa-pencil fa-2x"
         title="hide/show editor"
-        onclick="hide_show('#editor_container')"></i>
+        onclick="window.runner.$hide_show('#editor_container')"></i>
     <i class="control_button fa fa-keyboard-o fa-2x"
         title="hide/show keyboard"
-        onclick="hide_show('#keys_container')"></i>
+        onclick="window.runner.$hide_show('#keys_container')"></i>
     <i class="control_button fa fa-align-justify fa-2x"
         title="hide/show description"
-        onclick="hide_show('#description')"></i>
+        onclick="window.runner.$hide_show('#description')"></i>
     <i class="control_button fa fa-file-text-o fa-2x"
         title="log" id="log"
-        onclick="check_uncheck(this, 'file-text-o', 'file-o');"></i>
+        onclick="window.runner.$check_uncheck(this, 'file-text-o', 'file-o');"></i>
     <i class="control_button fa fa-link fa-2x"
         title="share current program" id="share link"
         onclick="Opal.Runner.$new().$minify_program()"></i>
     <select id="choose" onchange="launch3(this.value)"
         hidefocus="hidefocus">
         <option>program</option>
-    <script>
-for(k in pack)
-{
-
-        document.write("<option value='"+ k +"'>" + pack[k]['short'] + "</option>");
-}
-    </script>
     </select>
     <i class="edit_button fa fa-question fa-2x"
-        title="help" onclick="writeHelp()"></i>
+        title="help" onclick="window.runner.$writeHelp()"></i>
     <input title="iterations per run" id="iterations"
     type="range" value="10" min="1" max="100"
     onchange="document.getElementById('iterations_text').value = this.value"/>
@@ -226,56 +137,19 @@ for(k in pack)
         Opal.Runner.$new().$assemble(
         document.getElementById('editor').value)"/>
         <br/>
-        <input type="text" id="title" placeholder="title"
-        value="key"/>
+        <input type="text" id="title" placeholder="title" value=""/>
         <br/>
-        <input type="text" id="author" placeholder="author"
-        value="yazgoo"/>
+        <input type="text" id="author" placeholder="author" value=""/>
         <br/>
-        <input type="text" id="date" placeholder="date"
-        value="2013"/>
+        <input type="text" id="date" placeholder="date" value=""/>
         <br/>
-    <textarea id="editor">
-1225535041434520494e5641444552532076302e39204279204461766964
-2057494e544552600061006208a3d3d0187108f21e3120122d7008610030
-40122d69056c156e002387600af015f0073000124b23877e011245660068
-1c69006a046b0a6c046d3c6e0f00e0236b2347fd156004e09e127d236b38
-0078ff236b6006e09e128b236b38397801236b3600129f6005e09e12e966
-01651b8480a3cfd451a3cfd45175ff35ff12ad660012e9d4513f0112e9d4
-5166008340730383b562f883226208330012c923738206430812d3331012
-d523738206331812dd23738206432012e7332812e923733e001307790649
-1869006a046b0a6c047df46e0f00e02347236bfd15126ff7073700126ffd
-1523478ba43b12131b7c026afc3b0213237c026a0423473c18126f00e0a4
-d360146108620fd01f7008f21e302c1333f00a00e0a6f4fe651225a3b7f9
-1e6108235f8106235f8106235f8106235f7bd000ee80e080123000dbc67b
-0c00eea3cf601cd80400ee23478e2323476005f018f015f0073000137f00
-ee6a008de06b04e9a11257a602fd1ef06530ff13a56a006b046d016e0113
-8da500f01edbc67b087d017a013a07138d00ee3c7effff99997effff2424
-e77eff3c3c7edb81423c7effdb10387cfe00007f003f007f000000010101
-0303030300003f20202020202020203f0808ff0000fe00fc00fe0000007e
-4242626262620000ff0000000000000000ff0000ff007d00417d057d7d00
-00c2c2c6446c28380000ff0000000000000000ff0000ff00f71014f7f704
-0400007c44fec2c2c2c20000ff0000000000000000ff0000ff00ef2028e8
-e82f2f0000f985c5c5c5c5f90000ff0000000000000000ff0000ff00be00</textarea>
+    <textarea id="editor"></textarea>
     <br/>
 </div>
 <script>
-
-    Opal.Runner.$new().$setup();
-    function parse_response(response) {
-    Opal.Runner.$new().$parse_response(response);
-}
-    Opal.Runner.$new().$list();
-
-    /*$("body").keydown(function(e) {
-            if(e.keyCode == 37) window.key = 4;
-            else if(e.keyCode == 39) window.key = 6;
-            else if(e.keyCode == 38) window.key = 2;
-            else if(e.keyCode == 40) window.key = 8;
-            else if(e.keyCode == 32) window.key = 5;
-            });*/
-
-
+window.runner.$setup();
+function parse_response(r) { window.runner.$parse_response(r); }
+window.runner.$list();
 </script>
   </body>
 </html>
