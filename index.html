@@ -19,14 +19,14 @@
     <script>
 window.runner = Opal.Runner.$new();
 window.runner.$fill_keyboard();
-    emulator = null
+    window.runner.$emulator = null
     function launch() {
-        if(emulator != null) emulator.pause
-        emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
+        if(window.runner.$emulator != null) emulator.pause
+        window.runner.$emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
     }
     function launch2() {
-        if(emulator != null) emulator.pause
-        emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
+        if(window.runner.$emulator != null) emulator.pause
+        window.runner.$emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
     }
     function launch_hexa_or_source()
     {
@@ -34,9 +34,10 @@ window.runner.$fill_keyboard();
                 == -1) launch2();
         else launch();
     }
+/*
     function launch3(select) {
         //if(game == undefined) return;
-        if(emulator != null) emulator.pause
+        if(window.runner.$emulator != null) emulator.pause
         // Opal.Runner.$new().$disassemble()
         game = JSON.parse(select);
         text = game['content']
@@ -52,8 +53,9 @@ window.runner.$fill_keyboard();
         + "by " +game['author'] + " "
         + "in " +game['date'] + "<hr/>"
         + description + ""
-        emulator = Opal.Runner.$new().$run2(text);
+        window.runner.$emulator = Opal.Runner.$new().$run2(text);
     }
+    */
     </script>
     <br/>
         <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
@@ -88,7 +90,7 @@ window.runner.$fill_keyboard();
     <i id="step" value="step"
         title="step"
         class="control_button fa fa-step-forward fa-2x"
-        onclick="if(emulator != null) emulator.step = true"></i>
+        onclick="if(window.runner.$emulator != null) emulator.step = true"></i>
     <i class="control_button fa fa-expand fa-2x"
         title="fullscreen"
         onclick="window.runner.$goFullScreen();"></i>
@@ -107,7 +109,7 @@ window.runner.$fill_keyboard();
     <i class="control_button fa fa-link fa-2x"
         title="share current program" id="share link"
         onclick="Opal.Runner.$new().$minify_program()"></i>
-    <select id="choose" onchange="launch3(this.value)"
+    <select id="choose" onchange="window.runner.$launch3(this.value)"
         hidefocus="hidefocus">
         <option>program</option>
     </select>

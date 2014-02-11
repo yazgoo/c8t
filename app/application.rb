@@ -16,11 +16,12 @@ module Kernel
     end
 end
 class Runner
+    attr_accessor :emulator
     def run text
         assembly = Assembler.new.parse(text).output
-        e = Emulator.new(assembly, "Window");
-        e.run_multiple
-        e
+        @emulator = Emulator.new(assembly, "Window");
+        @emulator.run_multiple
+        @emulator
     end
     def keys_push k
         @@keys << [k, Time.new]
@@ -184,12 +185,13 @@ eos
     end
     def check_uncheck a, on, off
         prefix = 'control_button fa fa-2x fa-';
+        e = @emulator
         %x{
         if(a.getAttribute('class').indexOf(on) == -1) {
             a.setAttribute('class', prefix + on);
         }
         else {
-            if(emulator == null) launch_hexa_or_source();
+            if(e == null) launch_hexa_or_source();
                 a.setAttribute('class', prefix + off);
         }}
         return
@@ -197,5 +199,22 @@ eos
     def play_pause
         Element["#big_play_button"].css :visibility => :hidden
         check_uncheck `document.getElementById("pause")`, "play", "pause"
+    end
+    def launch3 select
+        @emulator.pause if not @emulator.nil?
+        game = JSON.parse select
+        ['title', 'author', 'date'].each do |i|
+            Element["##{i}"].value = game[i]
+        end
+        text = game['content'] 
+        Element["#editor"].value = text
+        description = game['description']
+        description = "" if description.nil?
+        description = description.gsub '\n', "<br/>"
+        Element["#description"].html = <<-eos
+        <b>#{game['title']}</b>, by #{game['author']}
+        in #{game['date']}<hr/>#{description}
+eos
+        run2 text
     end
 end
