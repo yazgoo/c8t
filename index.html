@@ -34,28 +34,6 @@ window.runner.$fill_keyboard();
                 == -1) launch2();
         else launch();
     }
-/*
-    function launch3(select) {
-        //if(game == undefined) return;
-        if(window.runner.$emulator != null) emulator.pause
-        // Opal.Runner.$new().$disassemble()
-        game = JSON.parse(select);
-        text = game['content']
-        document.getElementById('editor').value = text
-        document.getElementById('title').value = game['title']
-        document.getElementById('author').value = game['author']
-        document.getElementById('date').value = game['date']
-        var description = game['description'];
-        if(description == null) description = "";
-        description = description.replace(/\n/g, "<br/>")
-        document.getElementById('description').innerHTML = 
-        "<b>" +game['title'] + "</b>, "
-        + "by " +game['author'] + " "
-        + "in " +game['date'] + "<hr/>"
-        + description + ""
-        window.runner.$emulator = Opal.Runner.$new().$run2(text);
-    }
-    */
     </script>
     <br/>
         <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
