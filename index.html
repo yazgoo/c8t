@@ -18,22 +18,6 @@ href="app/font-awesome-4.0.3/css/font-awesome.min.css">
     </div>
     <script>
 window.runner = Opal.Runner.$new();
-window.runner.$fill_keyboard();
-window.runner.$emulator = null
-function launch() {
-    if(window.runner.$emulator != null) emulator.pause
-        window.runner.$emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
-}
-function launch2() {
-    if(window.runner.$emulator != null) emulator.pause
-        window.runner.$emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
-}
-function launch_hexa_or_source()
-{
-    if(document.getElementById('editor').value.indexOf(" ")
-            == -1) launch2();
-    else launch();
-}
     </script>
     <br/>
     <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
@@ -60,7 +44,7 @@ function launch_hexa_or_source()
             title="play/pause"
             onclick="runner.$play_pause();"/></i>
         <i class="control_button fa fa-refresh fa-2x" title="run"
-            onclick="launch_hexa_or_source()"></i>
+            onclick="window.runner.$launch_hexa_or_source()"></i>
         <i id="sound" value="sound"
             title="enable/disable sound"
             class="control_button fa fa-volume-off fa-2x"

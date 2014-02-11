@@ -40,6 +40,7 @@ class Runner
     end
     def initialize
         @special = ['%', ' ', ',', '/', '?', '=', '\n', ':', '{', '}', '"']
+        fill_keyboard
     end
     def encode address
         @special.each do |s|
@@ -216,5 +217,14 @@ eos
         in #{game['date']}<hr/>#{description}
 eos
         run2 text
+    end
+    def launch_hexa_or_source
+        @emulator.pause if not @emulator.nil?
+        code = Element['#editor'].value
+        if code.include? " "
+            run code
+        else
+            run2 code
+        end
     end
 end
