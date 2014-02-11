@@ -14,19 +14,18 @@ href="app/font-awesome-4.0.3/css/font-awesome.min.css">
 </head>
 <body>
 <div id="keys_container">
-    <div id="keyboard">
-    </div>
-    <script>
-window.runner = Opal.Runner.$new();
-    </script>
+    <div id="keyboard"></div>
     <br/>
     <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
-        <div class="flattr_button"></div></a>
+        <div class="flattr_button"></div>
+    </a>
     <a href="//github.com/yazgoo/c8t">
         <i title="view github repo"
             class="fa fa-github" id="github_ico"></i>
     </a>
-    <a class="btn" href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io%2Fc8t" title="reference on twitter">
+    <a class="btn"
+        href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io%2Fc8t"
+        title="reference on twitter">
         <i></i>
     </a>
 </div>
@@ -35,8 +34,7 @@ window.runner = Opal.Runner.$new();
         <i class="big_play_button fa fa-youtube-play fa-5x"
             id="big_play_button"
             onclick="runner.$play_pause();"></i>
-        <canvas id="screen">
-        </canvas>
+        <canvas id="screen"></canvas>
     </div>
     <div id="control">
         <i class="control_button fa fa-play fa-2x"
@@ -48,38 +46,44 @@ window.runner = Opal.Runner.$new();
         <i id="sound" value="sound"
             title="enable/disable sound"
             class="control_button fa fa-volume-off fa-2x"
-            onclick="window.runner.$check_uncheck(this, 'volume-off', 'volume-up');"></i>
+            onclick="window.runner.$check_uncheck(
+            this, 'volume-off', 'volume-up');"></i>
         <i id="step" value="step"
             title="step"
             class="control_button fa fa-step-forward fa-2x"
-            onclick="if(window.runner.$emulator != null) emulator.step = true"></i>
+            onclick="if(window.runner.$emulator != null)
+            emulator.step = true"></i>
         <i class="control_button fa fa-expand fa-2x"
             title="fullscreen"
             onclick="window.runner.$goFullScreen();"></i>
         <i class="control_button fa fa-pencil fa-2x"
             title="hide/show editor"
-            onclick="window.runner.$hide_show('#editor_container')"></i>
+            onclick="window.runner.$hide_show(
+            '#editor_container')"></i>
         <i class="control_button fa fa-keyboard-o fa-2x"
             title="hide/show keyboard"
-            onclick="window.runner.$hide_show('#keys_container')"></i>
+            onclick="window.runner.$hide_show(
+            '#keys_container')"></i>
         <i class="control_button fa fa-align-justify fa-2x"
             title="hide/show description"
             onclick="window.runner.$hide_show('#description')"></i>
         <i class="control_button fa fa-file-text-o fa-2x"
             title="log" id="log"
-            onclick="window.runner.$check_uncheck(this, 'file-text-o', 'file-o');"></i>
+            onclick="window.runner.$check_uncheck(
+            this, 'file-text-o', 'file-o');"></i>
         <i class="control_button fa fa-link fa-2x"
             title="share current program" id="share link"
             onclick="Opal.Runner.$new().$minify_program()"></i>
-        <select id="choose" onchange="window.runner.$launch3(this.value)"
-            hidefocus="hidefocus">
+        <select id="choose" onchange="window.runner.$launch3(
+            this.value)" hidefocus="hidefocus">
             <option>program</option>
         </select>
         <i class="edit_button fa fa-question fa-2x"
             title="help" onclick="window.runner.$writeHelp()"></i>
         <input title="iterations per run" id="iterations"
         type="range" value="10" min="1" max="100"
-        onchange="document.getElementById('iterations_text').value = this.value"/>
+        onchange="document.getElementById(
+        'iterations_text').value = this.value"/>
         <input type="text" id="iterations_text" value="10" size="3"
         readonly="true"/>
     </div>
@@ -108,7 +112,7 @@ window.runner = Opal.Runner.$new();
     <br/>
 </div>
 <script>
-window.runner.$setup();
+window.runner = Opal.Runner.$new();
 function parse_response(r) { window.runner.$parse_response(r); }
 window.runner.$list();
 </script>

@@ -41,6 +41,7 @@ class Runner
     def initialize
         @special = ['%', ' ', ',', '/', '?', '=', '\n', ':', '{', '}', '"']
         fill_keyboard
+        setup
     end
     def encode address
         @special.each do |s|
