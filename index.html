@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"/>
-    <link rel="stylesheet"
-    href="app/font-awesome-4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="app.css"/>
-    <script src="app/jquery-1.7.2.min.js"></script>
-    <script src="build.js"></script>
-    <title>c8t</title>
-  </head>
-  <body>
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style"
+content="black-translucent"/>
+<link rel="stylesheet"
+href="app/font-awesome-4.0.3/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="app.css"/>
+<script src="app/jquery-1.7.2.min.js"></script>
+<script src="build.js"></script>
+<title>c8t</title>
+</head>
+<body>
 <div id="keys_container">
     <div id="keyboard">
     </div>
     <script>
 window.runner = Opal.Runner.$new();
 window.runner.$fill_keyboard();
-    window.runner.$emulator = null
-    function launch() {
-        if(window.runner.$emulator != null) emulator.pause
+window.runner.$emulator = null
+function launch() {
+    if(window.runner.$emulator != null) emulator.pause
         window.runner.$emulator = Opal.Runner.$new().$run(document.getElementById('editor').value);
-    }
-    function launch2() {
-        if(window.runner.$emulator != null) emulator.pause
+}
+function launch2() {
+    if(window.runner.$emulator != null) emulator.pause
         window.runner.$emulator = Opal.Runner.$new().$run2(document.getElementById('editor').value);
-    }
-    function launch_hexa_or_source()
-    {
-        if(document.getElementById('editor').value.indexOf(" ")
-                == -1) launch2();
-        else launch();
-    }
+}
+function launch_hexa_or_source()
+{
+    if(document.getElementById('editor').value.indexOf(" ")
+            == -1) launch2();
+    else launch();
+}
     </script>
     <br/>
-        <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
-            <div class="flattr_button"></div></a>
-        <a href="//github.com/yazgoo/c8t">
-            <i title="view github repo"
-                class="fa fa-github" id="github_ico"></i>
-        </a>
-        <a class="btn" href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io%2Fc8t" title="reference on twitter">
-            <i></i>
-        </a>
+    <a href="//flattr.com/submit/auto?user_id=yazgoo&url=http%3A%2F%2Fyazgoo.github.io%2Fc8t">
+        <div class="flattr_button"></div></a>
+    <a href="//github.com/yazgoo/c8t">
+        <i title="view github repo"
+            class="fa fa-github" id="github_ico"></i>
+    </a>
+    <a class="btn" href="//twitter.com/intent/tweet?text=http%3A%2F%2Fyazgoo.github.io%2Fc8t" title="reference on twitter">
+        <i></i>
+    </a>
 </div>
 <div>
     <div id="screen_container">
@@ -61,68 +61,65 @@ window.runner.$fill_keyboard();
             onclick="runner.$play_pause();"/></i>
         <i class="control_button fa fa-refresh fa-2x" title="run"
             onclick="launch_hexa_or_source()"></i>
-    <i id="sound" value="sound"
-        title="enable/disable sound"
-        class="control_button fa fa-volume-off fa-2x"
-        onclick="window.runner.$check_uncheck(this, 'volume-off', 'volume-up');"></i>
-    <i id="step" value="step"
-        title="step"
-        class="control_button fa fa-step-forward fa-2x"
-        onclick="if(window.runner.$emulator != null) emulator.step = true"></i>
-    <i class="control_button fa fa-expand fa-2x"
-        title="fullscreen"
-        onclick="window.runner.$goFullScreen();"></i>
-    <i class="control_button fa fa-pencil fa-2x"
-        title="hide/show editor"
-        onclick="window.runner.$hide_show('#editor_container')"></i>
-    <i class="control_button fa fa-keyboard-o fa-2x"
-        title="hide/show keyboard"
-        onclick="window.runner.$hide_show('#keys_container')"></i>
-    <i class="control_button fa fa-align-justify fa-2x"
-        title="hide/show description"
-        onclick="window.runner.$hide_show('#description')"></i>
-    <i class="control_button fa fa-file-text-o fa-2x"
-        title="log" id="log"
-        onclick="window.runner.$check_uncheck(this, 'file-text-o', 'file-o');"></i>
-    <i class="control_button fa fa-link fa-2x"
-        title="share current program" id="share link"
-        onclick="Opal.Runner.$new().$minify_program()"></i>
-    <select id="choose" onchange="window.runner.$launch3(this.value)"
-        hidefocus="hidefocus">
-        <option>program</option>
-    </select>
-    <i class="edit_button fa fa-question fa-2x"
-        title="help" onclick="window.runner.$writeHelp()"></i>
-    <input title="iterations per run" id="iterations"
-    type="range" value="10" min="1" max="100"
-    onchange="document.getElementById('iterations_text').value = this.value"/>
-    <input type="text" id="iterations_text" value="10" size="3"
-    readonly="true"/>
+        <i id="sound" value="sound"
+            title="enable/disable sound"
+            class="control_button fa fa-volume-off fa-2x"
+            onclick="window.runner.$check_uncheck(this, 'volume-off', 'volume-up');"></i>
+        <i id="step" value="step"
+            title="step"
+            class="control_button fa fa-step-forward fa-2x"
+            onclick="if(window.runner.$emulator != null) emulator.step = true"></i>
+        <i class="control_button fa fa-expand fa-2x"
+            title="fullscreen"
+            onclick="window.runner.$goFullScreen();"></i>
+        <i class="control_button fa fa-pencil fa-2x"
+            title="hide/show editor"
+            onclick="window.runner.$hide_show('#editor_container')"></i>
+        <i class="control_button fa fa-keyboard-o fa-2x"
+            title="hide/show keyboard"
+            onclick="window.runner.$hide_show('#keys_container')"></i>
+        <i class="control_button fa fa-align-justify fa-2x"
+            title="hide/show description"
+            onclick="window.runner.$hide_show('#description')"></i>
+        <i class="control_button fa fa-file-text-o fa-2x"
+            title="log" id="log"
+            onclick="window.runner.$check_uncheck(this, 'file-text-o', 'file-o');"></i>
+        <i class="control_button fa fa-link fa-2x"
+            title="share current program" id="share link"
+            onclick="Opal.Runner.$new().$minify_program()"></i>
+        <select id="choose" onchange="window.runner.$launch3(this.value)"
+            hidefocus="hidefocus">
+            <option>program</option>
+        </select>
+        <i class="edit_button fa fa-question fa-2x"
+            title="help" onclick="window.runner.$writeHelp()"></i>
+        <input title="iterations per run" id="iterations"
+        type="range" value="10" min="1" max="100"
+        onchange="document.getElementById('iterations_text').value = this.value"/>
+        <input type="text" id="iterations_text" value="10" size="3"
+        readonly="true"/>
     </div>
 </div>
-    <div id="description">
-    </div>
-</div>
-    <div id="editor_container">
-        <i class="edit_button fa fa-eraser fa-2x" title="clear"
+<div id="description"></div>
+<div id="editor_container">
+    <i class="edit_button fa fa-eraser fa-2x" title="clear"
         onclick="document.getElementById('editor').value=''"></i>
-        <input type="button" value="0x&gt;" title="disassemble"
-        class="square_button"
-        onclick="document.getElementById('editor').value=
-        Opal.Runner.$new().$disassemble(
-        document.getElementById('editor').value)"/>
-        <input type="button" value="&gt;0x" class="square_button"
-        title="assemble"
-        onclick="document.getElementById('editor').value=
-        Opal.Runner.$new().$assemble(
-        document.getElementById('editor').value)"/>
-        <br/>
-        <input type="text" id="title" placeholder="title" value=""/>
-        <br/>
-        <input type="text" id="author" placeholder="author" value=""/>
-        <br/>
-        <input type="text" id="date" placeholder="date" value=""/>
-        <br/>
+    <input type="button" value="0x&gt;" title="disassemble"
+    class="square_button"
+    onclick="document.getElementById('editor').value=
+    Opal.Runner.$new().$disassemble(
+    document.getElementById('editor').value)"/>
+    <input type="button" value="&gt;0x" class="square_button"
+    title="assemble"
+    onclick="document.getElementById('editor').value=
+    Opal.Runner.$new().$assemble(
+    document.getElementById('editor').value)"/><br/>
+    <input type="text" id="title"
+    placeholder="title" value=""/><br/>
+    <input type="text" id="author"
+    placeholder="author" value=""/><br/>
+    <input type="text" id="date"
+    placeholder="date" value=""/><br/>
     <textarea id="editor"></textarea>
     <br/>
 </div>
@@ -131,5 +128,5 @@ window.runner.$setup();
 function parse_response(r) { window.runner.$parse_response(r); }
 window.runner.$list();
 </script>
-  </body>
+</body>
 </html>
