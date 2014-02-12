@@ -150,13 +150,18 @@ eos
 )
     end
     def goFullScreen
-        canvas = Element["#screen"]
-        %x{ if(canvas.requestFullScreen)
-            canvas.requestFullScreen()
-        else if(canvas.webkitRequestFullScreen != undefined)
-            canvas.webkitRequestFullScreen()
-        else if(canvas.mozRequestFullScreen != undefined)
-            canvas.mozRequestFullScreen() }
+        %x{ 
+        elem = document.getElementById("screen");
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+          } else if (elem.msRequestFullscreen) {
+              elem.msRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+              elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+              elem.webkitRequestFullscreen();
+        }
+        }
         return
     end
     def fill_keyboard
