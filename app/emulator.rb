@@ -56,7 +56,7 @@ class Window < Hash
         i = nil
         keys = [42, 34, 171, 187, 40, 41, 64, 43,
                 45, 47, 97, 98, 99, 100, 101, 102]
-        (a.eq||=EventQueue.new).each {|e| i = keys.index e.key if e.is_a? KeyDownEvent}
+        (a.eq||=EventQueue.new).each {|e| i = keys.index e.key if e.is_a? KeyDownEvent and not e.key.nil?}
         if a.block
             if i.nil?
                 if ENV.size == 0

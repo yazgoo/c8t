@@ -80,7 +80,9 @@ class Runner
         load_program
         key_to_keypad_key = {37=> 4, 39=> 6, 38=> 2, 40=> 8, 32=> 5}
         Element['body'].on(:keydown) do |e|
-            keys_push key_to_keypad_key[e.key_code]
+            key = key_to_keypad_key[e.key_code]
+            keys_push key
+            key.nil?
         end
         Element['#screen'].on(:mousedown) do |e|
             left = `e.$target().offset().left`
