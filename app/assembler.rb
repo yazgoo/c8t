@@ -68,6 +68,7 @@ class Assembler
         self
     end
     def unparse data
+        @current_address = 0
         if data.is_a? Array
             data.each { |i| parse_instruction i }
         else
@@ -88,7 +89,10 @@ class Assembler
         sprintf(".data %d", i.to_i(16))
     end
     def parse_instruction i
-        @text << parse_instruction_simple(i)
+        s = @current_address.to_s
+        s = (" " * (3 - s.size)) + s if s.size < 3
+        @text <<  s + ": " + parse_instruction_simple(i)
+        @current_address += 2
     end
     def output where = nil
         assemble
@@ -112,7 +116,7 @@ class Assembler
         end
     end
     def parse_line line
-        line = line.split(" ")
+        line = line.strip.split(" ") if line.is_a? String
         if line.size > 0
             return if line[0][0] == ";"
             if line[0][-1..-1] == ":"
@@ -122,8 +126,8 @@ class Assembler
             end
             line = line.collect!{|i| i.upcase }.join " "
             r = @instructions.keys.map{ |re| (line.match(re) and re.to_s.split.size == line.split.size)?re : nil }.compact.first
-            if r.nil?
-                @result << ["%04x", [line.split.last.to_i.to_s]]
+            if r.nil? or @instructions[r].nil?
+                @result << ["%04x", [line.split(" ").last.to_i.to_s]]
             else
                 @result << [@instructions[r], line.match(r).to_a[1..-1]]
             end

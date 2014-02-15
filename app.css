@@ -119,10 +119,9 @@ body {
     border-left: 1px solid black;
 }
 #editor {
-    width: 160px;
-    height: 530px;
+    width: 225px;
+    height: 70%;
     border: 0;
-    overflow: hidden;
 }
 #description {
     display: none;

@@ -42,6 +42,7 @@ class Runner
         @special = ['%', ' ', ',', '/', '?', '=', '\n', ':', '{', '}', '"']
         fill_keyboard
         setup
+        list
     end
     def encode address
         @special.each do |s|
@@ -109,10 +110,14 @@ class Runner
     end
     @@page = 1
     def list page=1
+        %x{
+ window.parse_response = function(r)
+ { window.runner.$parse_response(r); }
+        }
         opts =  { 
             :payload => "format=json&q=" + encode("select * from json where url=\"https://bitly.com/u/c8tc8t.json?page=#{page}\""),
         }
-        HTTP.new("http://query.yahooapis.com/v1/public/yql?callback=parse_response", "POST", opts).send!
+        HTTP.new("http://query.yahooapis.com/v1/public/yql?callback=window.parse_response", "POST", opts).send!
     end
     def parse_response response
         if `response.query.results.json.data != undefined`
