@@ -68,7 +68,7 @@ class Assembler
         self
     end
     def unparse data
-        @current_address = 0
+        @current_address = 512
         if data.is_a? Array
             data.each { |i| parse_instruction i }
         else
@@ -90,7 +90,7 @@ class Assembler
     end
     def parse_instruction i
         s = @current_address.to_s
-        s = (" " * (3 - s.size)) + s if s.size < 3
+        s = (" " * (4 - s.size)) + s if s.size < 4
         @text <<  s + ": " + parse_instruction_simple(i)
         @current_address += 2
     end

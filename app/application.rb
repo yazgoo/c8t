@@ -86,9 +86,19 @@ class Runner
         end
         Element['#screen'].on(:mousedown) do |e|
             left = `e.$target().offset().left`
+            top = `e.$target().offset().top`
             x = (e.page_x - left) / e.target.width
+            y = (e.page_y - top) / e.target.height
             @click = every 100 do
-                k = x > 2.0/3 ? 6 : x > 1.0/3 ? 5 : 4
+#                +---+---+---+
+#                | 1 | 2 | 3 |
+#                +---+---+---+ 
+#                | 4 | 5 | 6 |
+#                +---+---+---+ 
+#                | 7 | 8 | 9 |
+#                +---+---+---+
+                k = (y * 3).to_i * 3 + (x * 3).to_i + 1
+                # k = x > 2.0/3 ? 6 : x > 1.0/3 ? 5 : 4
                 keys_push k
             end
         end
