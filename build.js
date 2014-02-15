@@ -12084,8 +12084,8 @@ if (a == null) a = nil;
       }
       i = nil;
       keys = [42, 34, 171, 187, 40, 41, 64, 43, 45, 47, 97, 98, 99, 100, 101, 102];
-      ($a = ($b = (($c = a, ((($d = $c.$eq()) !== false && $d !== nil) ? $d : $c['$eq=']((($e = $scope.EventQueue) == null ? $opal.cm('EventQueue') : $e).$new()))))).$each, $a._p = (TMP_5 = function(e){var self = TMP_5._s || this, $a, $b, $c;if (e == null) e = nil;
-      if (($a = ($b = e['$is_a?']((($c = $scope.KeyDownEvent) == null ? $opal.cm('KeyDownEvent') : $c)), $b !== false && $b !== nil ?($c = e.$key()['$nil?'](), ($c === nil || $c === false)) : $b)) !== false && $a !== nil) {
+      ($a = ($b = (($c = a, ((($d = $c.$eq()) !== false && $d !== nil) ? $d : $c['$eq=']((($e = $scope.EventQueue) == null ? $opal.cm('EventQueue') : $e).$new()))))).$each, $a._p = (TMP_5 = function(e){var self = TMP_5._s || this, $a, $b, $c, $d;if (e == null) e = nil;
+      if (($a = ($b = ($c = e['$is_a?']((($d = $scope.KeyDownEvent) == null ? $opal.cm('KeyDownEvent') : $d)), $c !== false && $c !== nil ?($d = e.$key()['$nil?'](), ($d === nil || $d === false)) : $c), $b !== false && $b !== nil ?($c = i = keys.$index(e.$key())['$nil?'](), ($c === nil || $c === false)) : $b)) !== false && $a !== nil) {
           return i = keys.$index(e.$key())
           } else {
           return nil
